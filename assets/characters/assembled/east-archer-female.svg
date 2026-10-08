@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="64" height="86" viewBox="0 0 64 86">
+<image href="../female/female-base.png" x="8" y="2" width="48" height="82" preserveAspectRatio="none" image-rendering="pixelated"/>
+<image href="../clothes/east-archer-basic.svg" x="0" y="0" width="64" height="64" preserveAspectRatio="none" image-rendering="pixelated"/>
+
+<image href="../weapons/east-bow-basic.svg" x="0" y="0" width="64" height="64" preserveAspectRatio="none" image-rendering="pixelated"/>
+</svg>
