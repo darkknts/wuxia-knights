@@ -1,0 +1,22 @@
+{
+  "starterEquipment": {
+    "east_warrior": {
+      "clothes": "east-warrior-basic",
+      "weapon": "azure-dragon-glaive-basic"
+    },
+    "east_archer": {
+      "clothes": "east-archer-basic",
+      "weapon": "east-bow-basic"
+    },
+    "west_knight": {
+      "clothes": "west-knight-basic",
+      "weapon": "knight-sword-basic",
+      "shield": "knight-shield-basic"
+    },
+    "west_archer": {
+      "clothes": "west-archer-basic",
+      "weapon": "west-bow-basic"
+    }
+  },
+  "designRule": "초보자 시작 장비는 단순하고 기능을 식별하기 쉬운 형태로 제작하며 고급 장비는 추후 추가"
+}
