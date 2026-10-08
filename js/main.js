@@ -59,3 +59,5 @@ let dx=0,dy=0;if(this.keys.A.isDown||this.keys.LEFT.isDown)dx--;if(this.keys.D.i
 dx+=this.joystick.x;dy+=this.joystick.y;if(dx||dy){const l=Math.hypot(dx,dy);this.player.x=Phaser.Math.Clamp(this.player.x+dx/l*this.playerSpeed*this.game.loop.delta/1000,110,2090);this.player.y=Phaser.Math.Clamp(this.player.y+dy/l*this.playerSpeed*this.game.loop.delta/1000,110,1290);this.player.list[1].y=Math.sin(this.time.now/80)*2}
 }}
 const config={type:Phaser.AUTO,parent:"game",width:1280,height:720,backgroundColor:"#18251a",scale:{mode:Phaser.Scale.RESIZE,autoCenter:Phaser.Scale.CENTER_BOTH},pixelArt:true,scene:[WorldScene]};boot();
+const APP_VERSION="7";
+setInterval(async()=>{try{const r=await fetch("./version.json?t="+Date.now(),{cache:"no-store"});const v=await r.json();if(v.version!==APP_VERSION)location.reload()}catch(e){}},10000);
