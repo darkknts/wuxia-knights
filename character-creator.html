@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>무협기사단 - 캐릭터 생성</title>
+<link rel="stylesheet" href="./css/style.css">
+<style>
+.creator{width:min(94vw,1000px);margin:24px auto;padding:28px;background:#181818;border:2px solid #6c5634}
+.controls{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin:24px 0}
+.control{background:#24201b;padding:18px;border:1px solid #6c5634}
+.control h3{margin:0 0 12px}.choices{display:flex;gap:8px;flex-wrap:wrap}
+.choice{padding:10px 16px;background:#151515;color:#eee;border:1px solid #6c5634;cursor:pointer}.choice.active{background:#6c5634}
+.stage{display:flex;align-items:center;justify-content:center;min-height:360px;background:repeating-conic-gradient(#302d29 0 25%,#24221f 0 50%) 0/48px 48px;border:1px solid #6c5634}
+.sprite{position:relative;width:256px;height:256px;image-rendering:pixelated}.sprite img{position:absolute;inset:0;width:100%;height:100%;image-rendering:pixelated}
+.info{text-align:center;margin-top:18px}.job{font-size:28px}.faction{color:#bda57d}
+@media(max-width:650px){.controls{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<main class="creator">
+<p class="eyebrow">STEP 2-4 · CHARACTER CREATION</p>
+<h1>캐릭터 생성</h1>
+<p class="subtitle">성별과 직업을 선택하면 기본 바디에 얼굴, 헤어, 의상, 무기가 자동으로 조합됩니다.</p>
+<div class="controls">
+<section class="control"><h3>성별</h3><div class="choices" id="gender"></div></section>
+<section class="control"><h3>직업</h3><div class="choices" id="job"></div></section>
+</div>
+<div class="stage"><div class="sprite" id="sprite"></div></div>
+<div class="info"><div class="job" id="name"></div><div class="faction" id="faction"></div></div>
+</main>
+<script type="module" src="./js/character/character-creator.js"></script>
+</body></html>
