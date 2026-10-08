@@ -24,15 +24,15 @@ g.fillStyle(0x4f8490,.9);g.fillRect(1750,100,260,420);this.add.text(1880,310,"�
 }
 tree(x,y){const c=this.add.graphics();c.fillStyle(0x315a37);c.fillCircle(x,y,38);c.fillStyle(0x704d32);c.fillRect(x-8,y+28,16,35);c.setDepth(5)}
 createTouchControls(){
-const w=this.scale.width,h=this.scale.height;
-const base=this.add.circle(90,h-82,58,0x171411,.82).setStrokeStyle(4,0xd5b16d,.95).setScrollFactor(0).setDepth(200);
-const knob=this.add.circle(90,h-82,27,0xd5b16d,.95).setStrokeStyle(3,0xffedc2,.95).setScrollFactor(0).setDepth(201);
-this.add.text(90,h-16,"이동",{fontSize:"13px",color:"#fff",fontStyle:"bold",backgroundColor:"#171411cc",padding:{x:8,y:4}}).setOrigin(.5).setScrollFactor(0).setDepth(202);
-const center={x:90,y:h-82},radius=58,knobRadius=34;
+const base=this.add.circle(90,this.scale.height-82,58,0x171411,.82).setStrokeStyle(4,0xd5b16d,.95).setScrollFactor(0).setDepth(200);
+const knob=this.add.circle(90,this.scale.height-82,27,0xd5b16d,.95).setStrokeStyle(3,0xffedc2,.95).setScrollFactor(0).setDepth(201);
+const label=this.add.text(90,this.scale.height-16,"이동",{fontSize:"13px",color:"#fff",fontStyle:"bold",backgroundColor:"#171411cc",padding:{x:8,y:4}}).setOrigin(.5).setScrollFactor(0).setDepth(202);
+const center={x:90,y:this.scale.height-82},radius=58,knobRadius=34;
+let activePointerId=null;
 const place=()=>{
-center.x=Math.max(76,Math.min(92,this.scale.width*.14));
+center.x=Math.max(76,Math.min(110,this.scale.width*.14));
 center.y=this.scale.height-82;
-base.setPosition(center.x,center.y);knob.setPosition(center.x,center.y);
+base.setPosition(center.x,center.y);knob.setPosition(center.x,center.y);label.setPosition(center.x,this.scale.height-16);
 };
 place();this.scale.on("resize",place);
 const move=p=>{
@@ -41,12 +41,18 @@ if(d>knobRadius){dx=dx/d*knobRadius;dy=dy/d*knobRadius}
 this.joystick.x=dx/knobRadius;this.joystick.y=dy/knobRadius;
 knob.setPosition(center.x+dx,center.y+dy);
 };
-const release=()=>{this.joystick.active=false;this.joystick.x=0;this.joystick.y=0;knob.setPosition(center.x,center.y)};
-base.on("pointerdown",p=>{this.joystick.active=true;move(p)});
-this.input.on("pointermove",p=>{if(this.joystick.active)move(p)});
+const release=p=>{
+if(activePointerId!==null&&p&&p.id!==activePointerId)return;
+activePointerId=null;this.joystick.active=false;this.joystick.x=0;this.joystick.y=0;knob.setPosition(center.x,center.y);
+};
+this.input.on("pointerdown",p=>{
+if(Math.hypot(p.x-center.x,p.y-center.y)<=radius*1.25){
+activePointerId=p.id;this.joystick.active=true;move(p);
+}
+});
+this.input.on("pointermove",p=>{if(this.joystick.active&&p.id===activePointerId)move(p)});
 this.input.on("pointerup",release);
 this.input.on("pointerupoutside",release);
-this.input.addPointer(2);
 }
 update(){
 let dx=0,dy=0;if(this.keys.A.isDown||this.keys.LEFT.isDown)dx--;if(this.keys.D.isDown||this.keys.RIGHT.isDown)dx++;if(this.keys.W.isDown||this.keys.UP.isDown)dy--;if(this.keys.S.isDown||this.keys.DOWN.isDown)dy++;
