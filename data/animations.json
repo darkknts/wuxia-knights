@@ -1,0 +1,28 @@
+{
+  "animations": {
+    "idle": {
+      "loop": true,
+      "durationMs": 900,
+      "frames": ["idle_0", "idle_1", "idle_0"],
+      "motion": "subtle_breath"
+    },
+    "walk": {
+      "loop": true,
+      "durationMs": 520,
+      "frames": ["walk_0", "walk_1", "walk_2", "walk_1"],
+      "motion": "two_step_cycle"
+    },
+    "basic_attack": {
+      "loop": false,
+      "durationMs": 460,
+      "frames": ["attack_ready", "attack_swing", "attack_recover"],
+      "motion": "weapon_swing"
+    }
+  },
+  "designRules": {
+    "frameCanvas": "64x64",
+    "pixelPerfect": true,
+    "keepEquipmentAnchors": true,
+    "sharedTiming": true
+  }
+}
