@@ -1,0 +1,18 @@
+{
+  "bodies": [
+    {
+      "id": "male_base",
+      "name": "남성 기본 바디",
+      "gender": "male",
+      "canvas": { "width": 64, "height": 64 },
+      "ratio": { "head": 50, "body": 30, "equipment": 20 }
+    },
+    {
+      "id": "female_base",
+      "name": "여성 기본 바디",
+      "gender": "female",
+      "canvas": { "width": 64, "height": 64 },
+      "ratio": { "head": 50, "body": 30, "equipment": 20 }
+    }
+  ]
+}
