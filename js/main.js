@@ -2,6 +2,7 @@ import { playCharacterAnimation } from "./character/character-animation.js";
 import { playJobAttack } from "./character/job-attack-animation.js";
 import { playCharacterReaction } from "./character/character-reaction.js";
 import { playMonsterAnimation } from "./monster/monster-animation.js";
+import { getMap } from "./map/map-data.js";
 
 const JOBS=[
  {id:"east_warrior",name:"무사",faction:"동양",index:{male:0,female:1},skill:"청룡참",power:14},
@@ -17,11 +18,12 @@ const MONSTERS=[
 ];
 
 const app=document.querySelector("#app");
-let state={screen:"title",gender:null,job:null,name:"무명",monsterIndex:0,wave:1,level:1,exp:0,gold:0,heroHp:100,monsterHp:0,auto:true,running:false,timer:null,skillCooldown:false};
+let state={screen:"title",mapId:"village",gender:null,job:null,name:"무명",monsterIndex:0,wave:1,level:1,exp:0,gold:0,heroHp:100,monsterHp:0,auto:true,running:false,timer:null,skillCooldown:false};
 
 function render(){
  if(state.screen==="title") return title();
  if(state.screen==="select") return select();
+ if(state.screen==="map") return mapScreen();
  return battle();
 }
 function title(){
@@ -43,7 +45,19 @@ function select(){
  [["male","남성"],["female","여성"]].forEach(([id,label])=>{const b=document.createElement("button");b.textContent=label;b.className=state.gender===id?"selected":"";b.onclick=()=>{state.gender=id;render()};g.appendChild(b)});
  const j=document.querySelector("#jobs");
  JOBS.forEach(job=>{const b=document.createElement("button");b.innerHTML=`<strong>${job.name}</strong><small>${job.faction} · ${job.skill}</small>`;b.className=state.job?.id===job.id?"selected":"";b.onclick=()=>{state.job=job;render()};j.appendChild(b)});
- document.querySelector("#create").onclick=()=>{const n=document.querySelector("#name").value.trim();if(!state.gender||!state.job||!n){alert("성별, 직업, 이름을 선택해주세요.");return}state.name=n;state.screen="battle";state.running=true;state.monsterIndex=(state.wave-1)%MONSTERS.length;state.heroHp=100;spawnMonster();startLoop();render()};
+ document.querySelector("#create").onclick=()=>{const n=document.querySelector("#name").value.trim();if(!state.gender||!state.job||!n){alert("성별, 직업, 이름을 선택해주세요.");return}state.name=n;state.screen="map";state.running=false;state.monsterIndex=(state.wave-1)%MONSTERS.length;state.heroHp=100;spawnMonster();startLoop();render()};
+}
+function mapScreen(){
+ const map=getMap(state.mapId);
+ const isField=state.mapId==="east-field";
+ const job=state.job;
+ const buildings=map.buildings.map(b=>`<div class="map-object building" style="left:${b.x/9.6}%;top:${b.y/5.4}%;width:${b.w/9.6}%;height:${b.h/5.4}%"><div class="icon">${b.icon}</div><span>${b.name}</span></div>`).join("");
+ const trees=map.trees.map(([x,y])=>`<div class="map-object tree" style="left:${x/9.6}%;top:${y/5.4}%"></div>`).join("");
+ const portals=map.portals.map(p=>`<button class="map-object portal" data-map="${p.id}" style="left:${p.x/9.6}%;top:${p.y/5.4}%;width:${p.w/9.6}%;height:${p.h/5.4}%">${p.name}</button>`).join("");
+ app.innerHTML=`<section class="map-screen"><header class="map-top"><div><span class="eyebrow">WUXIA KNIGHTS · WORLD MAP</span><h2>${map.name}</h2><small>${map.description||""}</small></div><div class="map-actions"><button id="battleTest">전투 테스트</button><button id="changeChar">캐릭터 변경</button></div></header><div class="map-wrap"><div class="map-frame"><div class="map-ground"></div><div class="map-road"></div>${isField?"<div class=\"map-river\"></div>":""}<div class="map-label"><b>${map.name}</b><small>현재 위치</small></div>${buildings}${trees}${portals}<div class="map-object player-marker" style="left:${(map.spawn.x/9.6)-2}%;top:${(map.spawn.y/5.4)-5}%"><div class="player-dot">●</div><span>${state.name}</span></div></div><div class="map-info"><div class="card"><b>현재 지역</b><span>${map.name}</span></div><div class="card"><b>진영</b><span>${job?.faction||"미정"} · ${job?.name||"미정"}</span></div><div class="card"><b>다음 단계</b><span>캐릭터 실시간 이동</span></div></div></div></section>`;
+ document.querySelector("#battleTest").onclick=()=>{state.screen="battle";state.running=true;spawnMonster();startLoop();render()};
+ document.querySelector("#changeChar").onclick=()=>{state.screen="select";render()};
+ document.querySelectorAll("[data-map]").forEach(b=>b.onclick=()=>{state.mapId=b.dataset.map;render()});
 }
 function heroElement(){return document.querySelector("#heroSprite")}
 function monsterElement(){return document.querySelector("#monsterSprite")}
