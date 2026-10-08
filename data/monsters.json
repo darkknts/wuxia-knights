@@ -1,6 +1,45 @@
 {
-  "monsters": [],
   "design": {
-    "style": "2등신 픽셀 아트"
-  }
+    "style": "2등신 픽셀 아트",
+    "canvas": "64x86",
+    "anchor": "bottom-center"
+  },
+  "monsters": [
+    {
+      "id": "east_bandit",
+      "name": "산적",
+      "faction": "동양",
+      "role": "melee",
+      "level": 1,
+      "asset": "assets/monsters/east-bandit.svg",
+      "description": "초반 지역에 등장하는 근접형 산적"
+    },
+    {
+      "id": "east_fox_spirit",
+      "name": "여우령",
+      "faction": "동양",
+      "role": "magic",
+      "level": 2,
+      "asset": "assets/monsters/east_fox_spirit.svg",
+      "description": "빠른 움직임과 마법 공격을 사용하는 요괴"
+    },
+    {
+      "id": "west_goblin",
+      "name": "고블린",
+      "faction": "서양",
+      "role": "melee",
+      "level": 1,
+      "asset": "assets/monsters/west_goblin.svg",
+      "description": "초반 지역에 등장하는 근접형 몬스터"
+    },
+    {
+      "id": "west_skeleton",
+      "name": "스켈레톤",
+      "faction": "서양",
+      "role": "melee",
+      "level": 2,
+      "asset": "assets/monsters/west_skeleton.svg",
+      "description": "방어력이 높은 언데드형 몬스터"
+    }
+  ]
 }
