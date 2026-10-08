@@ -6,7 +6,7 @@
 <style>
 *{box-sizing:border-box}body{margin:0;background:#0e0d0b;color:#f4ead8;font-family:system-ui,"Noto Sans KR",sans-serif}
 main{width:min(1100px,94vw);margin:32px auto}.head{text-align:center;margin-bottom:28px}.head h1{margin:0 0 8px}.head p{color:#b9aa92}
-.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}.card{background:#191613;border:1px solid #5c4a2f;border-radius:8px;padding:14px;text-align:center}.stage{height:230px;display:grid;place-items:center;background:radial-gradient(circle,#3a3024,#151310 70%);border-radius:6px}.stage img{width:172px;height:172px;image-rendering:pixelated;object-fit:contain}.name{margin-top:12px;font-weight:700}.meta{color:#bda57d;font-size:13px;margin-top:4px}
+.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}.card{background:#191613;border:1px solid #5c4a2f;border-radius:8px;padding:14px;text-align:center}.stage{height:230px;display:grid;place-items:center;background:radial-gradient(circle,#3a3024,#151310 70%);border-radius:6px;position:relative;overflow:hidden}.stage img{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:172px;height:172px;image-rendering:pixelated;object-fit:fill}.stage img[src*="male-base"]{width:172px;height:231px}.stage img[src*="female-base"]{width:129px;height:222px}.name{margin-top:12px;font-weight:700}.meta{color:#bda57d;font-size:13px;margin-top:4px}
 @media(max-width:850px){.grid{grid-template-columns:repeat(2,1fr)}}@media(max-width:480px){.grid{grid-template-columns:1fr}}
 </style>
 </head>
