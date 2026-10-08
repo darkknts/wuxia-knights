@@ -123,15 +123,10 @@ $("create").onclick=()=>{
 
 function render(){
  const j=JOBS[jobId],s=$("sprite");s.innerHTML="";s.style.transform="";s.style.opacity="1";
- if(gender==="male" && jobId==="east_warrior"){
-   const i=document.createElement("img");i.src="./assets/characters/assembled/east-warrior-male.svg?v=20261008-2";i.alt="남성 무사";s.appendChild(i);
- }else{
-   const paths=[...j.parts[gender],...j.gear];
-   paths.forEach(p=>{const i=document.createElement("img");const ext=p.endsWith(".png")?"":".svg";i.src="./assets/characters/"+p+ext;s.appendChild(i)});
- }
+ const prefix=jobId==="east_warrior"?"east-warrior":jobId==="east_archer"?"east-archer":jobId==="west_knight"?"west-knight":"west-archer";
+ const i=document.createElement("img");i.src="./assets/characters/assembled/"+prefix+"-"+gender+".svg?v=20261008-assembled";i.alt=gender+" "+j.name;s.appendChild(i);
  $("characterName").textContent=characterName;$("characterJob").textContent=j.faction+" · "+j.name;
 }
-
 function idle(){clearBubble();playCharacterAnimation($("sprite"),"idle");setStatus("대기 모션 재생")}
 function attack(){clearBubble();playJobAttack($("sprite"),jobId,e=>{setStatus(JOBS[jobId].name+" 공격 적중 · "+e.effect);bubble("받아라!");})}
 function reaction(type,label){clearBubble();playCharacterReaction($("sprite"),type,()=>{setStatus(JOBS[jobId].name+" · "+label);if(type==="death")bubble("으윽...");if(type==="respawn")bubble("다시 간다!");})}
