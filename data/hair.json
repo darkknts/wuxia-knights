@@ -1,0 +1,10 @@
+{
+  "hair": [
+    {"id":"male_short","gender":"male","asset":"male-short"},
+    {"id":"male_long","gender":"male","asset":"male-long"},
+    {"id":"male_tied","gender":"male","asset":"male-tied"},
+    {"id":"female_short","gender":"female","asset":"female-short"},
+    {"id":"female_long","gender":"female","asset":"female-long"},
+    {"id":"female_ponytail","gender":"female","asset":"female-ponytail"}
+  ]
+}
