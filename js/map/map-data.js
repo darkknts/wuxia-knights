@@ -9,7 +9,7 @@ export const MAPS={
     trees:[[55,55],[875,55],[55,430],[875,430],[250,65],[710,465]],
     portals:[{id:"east-field",name:"청운 평야",x:850,y:260,w:70,h:70}]
   },
-  field:{id:"east-field",name:"청운 평야",width:960,height:540,spawn:{x:110,y:270},
+  "east-field":{id:"east-field",name:"청운 평야",width:960,height:540,spawn:{x:110,y:270},
     buildings:[],trees:[[70,70],[170,430],[330,75],[560,430],[760,70],[880,430],[470,90]],
     portals:[{id:"village",name:"청운촌",x:35,y:235,w:70,h:70}]
   }
