@@ -1,0 +1,11 @@
+{
+  "design":{"style":"2등신 픽셀 아트","shared":"all four starter monsters"},
+  "animations":{
+    "idle":{"duration":900,"loop":true,"keyframes":[{"x":0,"y":0,"rotate":0,"scale":1},{"x":0,"y":-1,"rotate":0,"scale":1},{"x":0,"y":0,"rotate":0,"scale":1}]},
+    "walk":{"duration":520,"loop":true,"keyframes":[{"x":-2,"y":0,"rotate":-2},{"x":2,"y":-1,"rotate":2},{"x":-2,"y":0,"rotate":-2},{"x":2,"y:-1,"rotate":2}]},
+    "attack":{"duration":420,"loop":false,"keyframes":[{"x":0,"y":0,"rotate":0,"scale":1},{"x":-4,"y":0,"rotate":-3,"scale":1},{"x":10,"y":-1,"rotate":6,"scale":1.02},{"x":0,"y":0,"rotate":0,"scale":1}]},
+    "hit":{"duration":280,"loop":false,"keyframes":[{"x":0,"y":0,"rotate":0,"scale":1,"opacity":1},{"x":-5,"y":0,"rotate":-5,"scale":1,"opacity":1},{"x":4,"y":-1,"rotate":5,"scale":1,"opacity":1},{"x":0,"y":0,"rotate":0,"scale":1,"opacity":1}]},
+    "death":{"duration":650,"loop":false,"keyframes":[{"x":0,"y":0,"rotate":0,"scale":1,"opacity":1},{"x":2,"y":2,"rotate":12,"scale":.98,"opacity":1},{"x":6,"y":9,"rotate":55,"scale":.9,"opacity":.65},{"x":10,"y":17,"rotate":85,"scale":.84,"opacity":0}]},
+    "respawn":{"duration":520,"loop":false,"keyframes":[{"x":0,"y":4,"rotate":0,"scale":.9,"opacity":0},{"x":0,"y":1,"rotate":0,"scale":.98,"opacity":.7},{"x":0,"y":0,"rotate":0,"scale":1,"opacity":1}]}
+  }
+}
