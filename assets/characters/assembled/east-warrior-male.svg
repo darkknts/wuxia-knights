@@ -1,31 +1,6 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="96" height="96" viewBox="0 0 96 96" shape-rendering="crispEdges">
-<path fill="#5b3824" d="M20 37h3v48h-3z"/>
-<path fill="#d7dde1" d="M4 8h6v3H7v5H5v9H3v13H1V18h2V12h1z"/>
-<path fill="#aeb7bd" d="M7 11h4v4h-3v7H6v10H4V17h3z"/>
-<path fill="#c08b3d" d="M18 45h8v3h-8z"/>
-<path fill="#211918" d="M29 10h5V7h7V4h18v3h7v4h5v7h4v17h-5v7h-7v5H34v-5h-7v-7h-5V23h3v-8h4z"/>
-<path fill="#56352b" d="M31 13h5V9h19v3h7v5h4v11h-4v-7h-6v-4H39v4h-7v8h-5v8h-4V23h4v-7h4z"/>
-<path fill="#7a4935" d="M36 10h7v5h-7zm10-3h7v5h-7zm9 5h6v5h-6zm-23 9h5v7h-5z"/>
-<path fill="#f2c2a0" d="M35 21h27v4h5v16h-4v8H35v-4h-5V27h5z"/>
-<path fill="#dfa07e" d="M30 29h4v8h-4zm32 0h5v8h-5z"/>
-<path fill="#4b3029" d="M34 18h7v6h-5v6h-5v-7h3zm12-5h7v9h-5v5h-5v-8h3zm10 5h8v7h-4v6h-4z"/>
-<path fill="#211a19" d="M36 31h8v5h-8zm15 0h8v5h-8z"/>
-<path fill="#6f98bd" d="M38 32h3v3h-3zm15 0h3v3h-3z"/>
-<path fill="#fff" d="M38 32h1v1h-1zm15 0h1v1h-1z"/>
-<path fill="#d77d75" d="M43 40h8v2h-8z"/>
-<path fill="#d99a78" d="M43 48h10v6H43z"/>
-<path fill="#2a201d" d="M34 51h29v5h6v25H58v8H38v-8H27V56h7z"/>
-<path fill="#a93830" d="M36 52h25v27H36z"/>
-<path fill="#d45a43" d="M38 54h9v11h-9zm12 0h9v11h-9z"/>
-<path fill="#61211e" d="M47 53h4v27h-4z"/>
-<path fill="#f1d7a4" d="M38 54h4l8 8-3 4-9-8zm21 0h-4l-8 8 3 4 9-8z"/>
-<path fill="#3d2923" d="M39 65h22v4H39z"/>
-<path fill="#d7a746" d="M35 75h29v4H35z"/>
-<path fill="#6f3928" d="M41 79h17v4H41z"/>
-<path fill="#a93830" d="M28 56h9v20h-5v5h-7V65h3zm34 0h9v9h3v16h-7v-5h-5z"/>
-<path fill="#f2c2a0" d="M24 75h8v7h-8zm45 0h8v7h-8z"/>
-<path fill="#3a2a24" d="M24 80h8v5h-8zm45 0h8v5h-8z"/>
-<path fill="#5b3027" d="M38 80h9v10h-3v4H32v-5h6zm13 0h9v9h4v5H51v-4h-3V85h3z"/>
-<path fill="#29211f" d="M31 89h14v6H29v-3zm20 1h14v5H50z"/>
-<path fill="#b18a42" d="M34 86h9v3h-9zm19 0h8v3h-8z"/>
+<svg xmlns="http://www.w3.org/2000/svg" width="64" height="86" viewBox="0 0 64 86">
+<image href="../male/male-base.svg" x="0" y="0" width="64" height="86" preserveAspectRatio="none" image-rendering="pixelated"/>
+<image href="../clothes/east-warrior-basic.svg" x="0" y="0" width="64" height="64" preserveAspectRatio="none" image-rendering="pixelated"/>
+
+<image href="../weapons/azure-dragon-glaive-basic.svg" x="0" y="0" width="64" height="64" preserveAspectRatio="none" image-rendering="pixelated"/>
 </svg>
