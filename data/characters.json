@@ -1,0 +1,11 @@
+{
+  "characters": [],
+  "design": {
+    "style": "2등신 픽셀 아트",
+    "ratio": {
+      "head": 50,
+      "body": 30,
+      "weaponEquipment": 20
+    }
+  }
+}
