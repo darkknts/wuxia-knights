@@ -1,19 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64" shape-rendering="crispEdges">
-<!-- chibi male base: skin only -->
-<g fill="#2a2522">
-  <path d="M22 5h20v3h4v5h2v13h-4v7h2v13h-5v16H34V46h-4v16H23V46h-5V33h2v-7h-4V13h2V8h4z"/>
-</g>
-<g fill="#f2c6a5">
-  <path d="M23 7h18v2h4v5h1v10h-4v5H22v-5h-4V14h1V10h4z"/>
-  <rect x="28" y="28" width="8" height="6"/>
-  <rect x="20" y="31" width="4" height="12"/>
-  <rect x="40" y="31" width="4" height="12"/>
-  <path d="M23 44h8v13h-1v4h-7zM33 44h8v17h-7V57h-1z"/>
-</g>
-<g fill="#e4a982">
-  <rect x="18" y="15" width="3" height="7"/>
-  <rect x="43" y="15" width="3" height="7"/>
-  <rect x="20" y="38" width="3" height="5"/>
-  <rect x="41" y="38" width="3" height="5"/>
-</g>
+<!-- chibi 2-head male body -->
+<path fill="#2b211e" d="M14 13h3V8h5V5h20v3h5v5h3v16h-4v9h4v7h-5v5h-4v14H34V49h-4v15H20V50h-5v-7h4v-9h-5z"/>
+<path fill="#f2c6a5" d="M18 14V9h5V7h18v2h5v5h2v12h-4v5H20v-5h-4V14zm5 19h18v8H23zm-6 1h6v9h-3v4h-5v-7h2zm26 0h5v6h2v7h-5v-4h-2zm-19 8h7v17h-7zm11 0h7v17h-7z"/>
+<path fill="#dfa17d" d="M16 16h3v8h-3zm32 0h3v8h-3zm-30 19h3v7h-3zm26 0h3v7h-3z"/>
 </svg>
