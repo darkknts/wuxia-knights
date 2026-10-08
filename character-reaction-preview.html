@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>무협기사단 - 피격/사망 모션</title>
+<link rel="stylesheet" href="./css/style.css">
+<style>
+.preview{width:min(94vw,1000px);margin:24px auto;padding:28px;background:#181818;border:2px solid #6c5634;text-align:center}
+.stage{height:340px;display:grid;place-items:center;background:repeating-conic-gradient(#302d29 0 25%,#24221f 0 50%) 0/48px 48px;border:1px solid #6c5634}
+.sprite{position:relative;width:220px;height:220px;image-rendering:pixelated}
+.sprite img{position:absolute;inset:0;width:100%;height:100%;image-rendering:pixelated}
+.choices{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin:20px 0}
+.choices button{padding:10px 15px}
+.actions{display:flex;gap:8px;justify-content:center;flex-wrap:wrap}
+.status{min-height:1.5em}
+</style>
+</head>
+<body>
+<main class="preview">
+<p class="eyebrow">STEP 2-7 · HIT / DEATH</p>
+<h1>피격 · 사망 · 부활 모션</h1>
+<p class="subtitle">모든 직업이 같은 반응 시스템을 공유하고 장비 구성은 그대로 유지합니다.</p>
+<div class="choices" id="jobs"></div>
+<div class="stage"><div class="sprite" id="sprite"></div></div>
+<div class="actions">
+<button id="hit">피격</button>
+<button id="death">사망</button>
+<button id="respawn">부활</button>
+</div>
+<p id="status" class="status"></p>
+</main>
+<script type="module">
+import { playCharacterReaction } from "./js/character/character-reaction.js";
+
+const data = {
+  east_warrior:{n:"무사",parts:["male/male-base","faces/default-male","hair/male-tied","clothes/east-warrior-basic","weapons/azure-dragon-glaive-basic"]},
+  east_archer:{n:"궁수",parts:["male/male-base","faces/default-male","hair/male-long","clothes/east-archer-basic","weapons/east-bow-basic"]},
+  west_knight:{n:"기사",parts:["male/male-base","faces/default-male","hair/male-short","clothes/west-knight-basic","shields/knight-shield-basic","weapons/knight-sword-basic"]},
+  west_archer:{n:"아처",parts:["male/male-base","faces/default-male","hair/male-short","clothes/west-archer-basic","weapons/west-bow-basic"]}
+};
+
+let current="east_warrior";
+const sprite=document.querySelector("#sprite");
+const status=document.querySelector("#status");
+
+function render(){
+  sprite.innerHTML="";
+  sprite.style.opacity="1";
+  sprite.style.transform="";
+  data[current].parts.forEach(path=>{
+    const img=document.createElement("img");
+    img.src="./assets/characters/"+path+".svg";
+    sprite.appendChild(img);
+  });
+  status.textContent=data[current].n+" 선택";
+}
+
+Object.entries(data).forEach(([id,job])=>{
+  const button=document.createElement("button");
+  button.textContent=job.n;
+  button.onclick=()=>{current=id;render();};
+  document.querySelector("#jobs").appendChild(button);
+});
+
+function play(type,label){
+  playCharacterReaction(sprite,type,()=>status.textContent=data[current].n+" · "+label);
+}
+
+document.querySelector("#hit").onclick=()=>play("hit","피격");
+document.querySelector("#death").onclick=()=>play("death","사망");
+document.querySelector("#respawn").onclick=()=>{sprite.style.opacity="0";play("respawn","부활");};
+
+render();
+</script>
+</body>
+</html>
