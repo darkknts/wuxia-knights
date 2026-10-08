@@ -124,7 +124,7 @@ $("create").onclick=()=>{
 function render(){
  const j=JOBS[jobId],s=$("sprite");s.innerHTML="";s.style.transform="";s.style.opacity="1";
  if(gender==="male" && jobId==="east_warrior"){
-   const i=document.createElement("img");i.src="./assets/characters/assembled/east-warrior-male.svg";i.alt="남성 무사";s.appendChild(i);
+   const i=document.createElement("img");i.src="./assets/characters/assembled/east-warrior-male.svg?v=20261008-2";i.alt="남성 무사";s.appendChild(i);
  }else{
    const paths=[...j.parts[gender],...j.gear];
    paths.forEach(p=>{const i=document.createElement("img");i.src="./assets/characters/"+p+".svg";s.appendChild(i)});
