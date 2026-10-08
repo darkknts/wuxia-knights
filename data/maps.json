@@ -1,4 +1,27 @@
 {
-  "maps": [],
-  "startingAreas": ["동양 마을", "서양 마을"]
+  "maps": [
+    {
+      "id": "village",
+      "name": "청운촌",
+      "type": "village",
+      "description": "무림과 기사단의 모험이 시작되는 작은 마을",
+      "width": 960,
+      "height": 540,
+      "spawn": {"x": 480, "y": 360},
+      "areas": [
+        {"id":"town-center","name":"마을 광장","x":240,"y":150,"width":480,"height":260},
+        {"id":"north-road","name":"북쪽 길","x":390,"y":40,"width":180,"height":130},
+        {"id":"east-road","name":"동쪽 길","x":700,"y":250,"width":220,"height":120}
+      ]
+    },
+    {
+      "id": "east-field",
+      "name": "청운 평야",
+      "type": "field",
+      "description": "동양 진영의 초급 사냥터",
+      "width": 960,
+      "height": 540,
+      "spawn": {"x": 110, "y": 270}
+    }
+  ]
 }
