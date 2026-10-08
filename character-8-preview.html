@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>무협기사단 · 8종 캐릭터 조합 테스트</title>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#0e0d0b;color:#f4ead8;font-family:system-ui,"Noto Sans KR",sans-serif}
+main{width:min(1100px,94vw);margin:32px auto}.head{text-align:center;margin-bottom:28px}.head h1{margin:0 0 8px}.head p{color:#b9aa92}
+.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}.card{background:#191613;border:1px solid #5c4a2f;border-radius:8px;padding:14px;text-align:center}.stage{height:230px;display:grid;place-items:center;background:radial-gradient(circle,#3a3024,#151310 70%);border-radius:6px}.stage img{width:172px;height:172px;image-rendering:pixelated;object-fit:contain}.name{margin-top:12px;font-weight:700}.meta{color:#bda57d;font-size:13px;margin-top:4px}
+@media(max-width:850px){.grid{grid-template-columns:repeat(2,1fr)}}@media(max-width:480px){.grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body><main>
+<div class="head"><h1>무협기사단 8종 캐릭터 조합</h1><p>남/여 × 무사 · 궁수 · 기사 · 아처 · 기본 장비 적용 상태</p></div>
+<div class="grid" id="grid"></div>
+</main>
+<script>
+const chars=[
+["east-warrior-male","남성 무사","동양"],["east-warrior-female","여성 무사","동양"],
+["east-archer-male","남성 궁수","동양"],["east-archer-female","여성 궁수","동양"],
+["west-knight-male","남성 기사","서양"],["west-knight-female","여성 기사","서양"],
+["west-archer-male","남성 아처","서양"],["west-archer-female","여성 아처","서양"]];
+document.getElementById("grid").innerHTML=chars.map(([id,name,faction])=>`<article class="card"><div class="stage"><img src="./assets/characters/assembled/${id}.svg?v=20261008-assembled"></div><div class="name">${name}</div><div class="meta">${faction} · 초보자 기본 장비</div></article>`).join("");
+</script>
+</body></html>
