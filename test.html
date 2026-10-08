@@ -1,0 +1,142 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>무협기사단 · 1차 테스트</title>
+<link rel="stylesheet" href="./css/style.css">
+<style>
+:root{--gold:#d6ad62;--panel:#171512;--panel2:#211d18;--line:#5c4a2f;--text:#f4ead8;--muted:#b9aa92}
+*{box-sizing:border-box}body{margin:0;background:#0e0d0b;color:var(--text);font-family:system-ui,-apple-system,"Noto Sans KR",sans-serif}
+button,input{font:inherit}.screen{min-height:100vh;display:none;align-items:center;justify-content:center;padding:24px}.screen.active{display:flex}
+.panel{width:min(940px,96vw);background:linear-gradient(180deg,#211d18,#141210);border:1px solid var(--line);box-shadow:0 20px 70px #0008;border-radius:10px;padding:32px}
+.title{text-align:center}.title h1{font-size:clamp(42px,8vw,78px);margin:0 0 8px;letter-spacing:.08em}.title p{color:var(--muted);margin:0 0 34px}
+.primary,.choice{border:1px solid #765d36;background:#2b241a;color:var(--text);padding:12px 20px;border-radius:6px;cursor:pointer}.primary{background:#5a4324;border-color:var(--gold);min-width:180px}.primary:hover,.choice:hover{filter:brightness(1.2)}
+h2{text-align:center;margin:0 0 24px}.step{color:var(--gold);font-size:13px;text-align:center;letter-spacing:.12em;margin-bottom:8px}
+.choices{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-bottom:22px}.choice{min-height:72px;text-align:left}.choice strong{display:block;font-size:18px}.choice span{display:block;color:var(--muted);font-size:13px;margin-top:3px}.choice.selected{outline:2px solid var(--gold);background:#3b2e1d}
+.name{text-align:center;margin:24px 0}.name input{width:min(360px,100%);padding:13px 15px;border-radius:6px;border:1px solid var(--line);background:#0d0c0a;color:white;text-align:center}
+.error{min-height:20px;color:#e8a58e;text-align:center;font-size:13px;margin:8px}.game{display:grid;grid-template-columns:1fr 280px;gap:18px}.stage{min-height:500px;display:grid;place-items:center;background:radial-gradient(circle,#4a3a27 0,#211c16 42%,#11100e 100%);border:1px solid var(--line);border-radius:8px;position:relative;overflow:hidden}.stage:after{content:"";position:absolute;bottom:56px;width:260px;height:22px;border-radius:50%;background:#0008;filter:blur(7px)}.sprite{position:relative;width:256px;height:256px;image-rendering:pixelated;z-index:2}.sprite img{position:absolute;inset:0;width:100%;height:100%;image-rendering:pixelated}.bubble{position:absolute;top:35px;left:50%;transform:translateX(-50%);z-index:4;background:#fff;color:#17120d;border:2px solid #30271d;border-radius:12px;padding:10px 15px;max-width:80%;text-align:center;font-weight:700;box-shadow:0 5px 15px #0006}.bubble.hidden{display:none}.side{background:#171411;border:1px solid var(--line);border-radius:8px;padding:20px}.side h2{text-align:left;margin-bottom:5px}.job{color:var(--gold);font-size:14px;margin-bottom:18px}.actions{display:grid;gap:9px}.actions button{padding:11px;border:1px solid var(--line);background:#29231b;color:var(--text);border-radius:5px;cursor:pointer}.actions button:hover{background:#3a3024}.status{color:var(--muted);font-size:13px;min-height:38px;margin-top:18px;padding-top:14px;border-top:1px solid #3a3024}.back{margin-top:14px;width:100%}
+@media(max-width:720px){.game{grid-template-columns:1fr}.stage{min-height:400px}.choices{grid-template-columns:1fr}.panel{padding:22px}}
+</style>
+</head>
+<body>
+
+<section class="screen active" id="titleScreen">
+  <div class="panel title">
+    <div class="step">WUXIA KNIGHTS · CHARACTER TEST</div>
+    <h1>무협기사단</h1>
+    <p>동양과 서양의 영웅들이 펼치는 방치형 RPG</p>
+    <button class="primary" id="start">캐릭터 테스트 시작</button>
+  </div>
+</section>
+
+<section class="screen" id="genderScreen">
+  <div class="panel">
+    <div class="step">STEP 1</div><h2>성별을 선택하세요</h2>
+    <div class="choices">
+      <button class="choice" data-gender="male"><strong>남성</strong><span>남성 기본 외형</span></button>
+      <button class="choice" data-gender="female"><strong>여성</strong><span>여성 기본 외형</span></button>
+    </div>
+  </div>
+</section>
+
+<section class="screen" id="jobScreen">
+  <div class="panel">
+    <div class="step">STEP 2</div><h2>직업을 선택하세요</h2>
+    <div class="choices" id="jobChoices"></div>
+  </div>
+</section>
+
+<section class="screen" id="nameScreen">
+  <div class="panel">
+    <div class="step">STEP 3</div><h2>캐릭터 이름을 입력하세요</h2>
+    <div class="name"><input id="nameInput" maxlength="12" placeholder="이름 (최대 12자)" value="무명"></div>
+    <div class="error" id="nameError"></div>
+    <div style="text-align:center"><button class="primary" id="create">캐릭터 생성</button></div>
+  </div>
+</section>
+
+<section class="screen" id="gameScreen">
+  <div class="panel">
+    <div class="step">CHARACTER TEST · STEP 4</div>
+    <div class="game">
+      <div class="stage">
+        <div class="bubble hidden" id="bubble"></div>
+        <div class="sprite" id="sprite"></div>
+      </div>
+      <aside class="side">
+        <h2 id="characterName">무명</h2>
+        <div class="job" id="characterJob">무사</div>
+        <div class="actions">
+          <button data-action="idle">대기 모션</button>
+          <button data-action="attack">기본 공격</button>
+          <button data-action="hit">피격</button>
+          <button data-action="death">사망</button>
+          <button data-action="respawn">부활</button>
+        </div>
+        <div class="status" id="status">캐릭터 생성 완료</div>
+        <button class="choice back" id="restart">처음부터 다시</button>
+      </aside>
+    </div>
+  </div>
+</section>
+
+<script type="module">
+import { playCharacterAnimation } from "./js/character/character-animation.js";
+import { playJobAttack } from "./js/character/job-attack-animation.js";
+import { playCharacterReaction } from "./js/character/character-reaction.js";
+
+const JOBS={
+ east_warrior:{name:"무사",faction:"동양",gender:"both",parts:{male:["male/male-base","faces/default-male","hair/male-tied"],female:["female/female-base","faces/default-female","hair/female-ponytail"]},gear:["clothes/east-warrior-basic","weapons/azure-dragon-glaive-basic"]},
+ east_archer:{name:"궁수",faction:"동양",gender:"both",parts:{male:["male/male-base","faces/default-male","hair/male-long"],female:["female/female-base","faces/default-female","hair/female-long"]},gear:["clothes/east-archer-basic","weapons/east-bow-basic"]},
+ west_knight:{name:"기사",faction:"서양",gender:"both",parts:{male:["male/male-base","faces/default-male","hair/male-short"],female:["female/female-base","faces/default-female","hair/female-short"]},gear:["clothes/west-knight-basic","shields/knight-shield-basic","weapons/knight-sword-basic"]},
+ west_archer:{name:"아처",faction:"서양",gender:"both",parts:{male:["male/male-base","faces/default-male","hair/male-short"],female:["female/female-base","faces/default-female","hair/female-short"]},gear:["clothes/west-archer-basic","weapons/west-bow-basic"]}
+};
+
+let gender="male",jobId="east_warrior",characterName="무명",currentAnimation=0;
+
+const $=id=>document.getElementById(id);
+function show(id){document.querySelectorAll(".screen").forEach(s=>s.classList.remove("active"));$(id).classList.add("active")}
+function setStatus(t){$("status").textContent=t}
+function clearBubble(){ $("bubble").classList.add("hidden") }
+function bubble(t){$("bubble").textContent=t;$("bubble").classList.remove("hidden");setTimeout(clearBubble,1400)}
+
+$("start").onclick=()=>show("genderScreen");
+document.querySelectorAll("[data-gender]").forEach(b=>b.onclick=()=>{
+  gender=b.dataset.gender;
+  document.querySelectorAll("[data-gender]").forEach(x=>x.classList.remove("selected"));
+  b.classList.add("selected"); show("jobScreen");
+});
+
+Object.entries(JOBS).forEach(([id,j])=>{
+ const b=document.createElement("button");b.className="choice";
+ b.innerHTML="<strong>"+j.name+"</strong><span>"+j.faction+" · 기본 장비</span>";
+ b.onclick=()=>{jobId=id;document.querySelectorAll("#jobChoices .choice").forEach(x=>x.classList.remove("selected"));b.classList.add("selected");show("nameScreen")};
+ $("jobChoices").appendChild(b);
+});
+
+$("create").onclick=()=>{
+ const n=$("nameInput").value.trim();
+ if(!n){$("nameError").textContent="이름을 입력해주세요.";return}
+ characterName=n; render(); show("gameScreen"); setStatus("캐릭터 생성 완료 · 대기 중"); bubble("좋아, 출발하자!");
+};
+
+function render(){
+ const j=JOBS[jobId],paths=[...j.parts[gender],...j.gear];const s=$("sprite");s.innerHTML="";s.style.transform="";s.style.opacity="1";
+ paths.forEach(p=>{const i=document.createElement("img");i.src="./assets/characters/"+p+".svg";s.appendChild(i)});
+ $("characterName").textContent=characterName;$("characterJob").textContent=j.faction+" · "+j.name;
+}
+
+function idle(){clearBubble();playCharacterAnimation($("sprite"),"idle");setStatus("대기 모션 재생")}
+function attack(){clearBubble();playJobAttack($("sprite"),jobId,e=>{setStatus(JOBS[jobId].name+" 공격 적중 · "+e.effect);bubble("받아라!");})}
+function reaction(type,label){clearBubble();playCharacterReaction($("sprite"),type,()=>{setStatus(JOBS[jobId].name+" · "+label);if(type==="death")bubble("으윽...");if(type==="respawn")bubble("다시 간다!");})}
+
+document.querySelectorAll("[data-action]").forEach(b=>b.onclick=()=>{
+ const a=b.dataset.action;
+ if(a==="idle")idle();else if(a==="attack")attack();else reaction(a,a==="hit"?"피격":a==="death"?"사망":"부활");
+});
+$("restart").onclick=()=>{clearBubble();show("genderScreen")};
+render();
+</script>
+</body>
+</html>
