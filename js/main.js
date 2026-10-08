@@ -49,10 +49,11 @@ class WorldScene extends Phaser.Scene{
   this.add.tileSprite(1280,800,96,1120,"k49").setScale(2).setDepth(2);
 
   // 실제 타일로 만든 4개의 건물/시설
-  this.makeBuilding("주막",420,330,7,5,"k40");
-  this.makeBuilding("대장간",1840,330,7,5,"k28");
-  this.makeBuilding("상점",420,1180,7,5,"k29");
-  this.makeBuilding("기사단",1840,1180,7,5,"k40");
+  // 시작 위치에서 바로 보이도록 주요 건물을 중앙 광장 주변에 배치
+  this.makeBuilding("주막",1030,520,9,6,"k40");
+  this.makeBuilding("대장간",1530,520,9,6,"k28");
+  this.makeBuilding("상점",1030,1080,9,6,"k29");
+  this.makeBuilding("기사단",1530,1080,9,6,"k40");
 
   // 중앙 광장 장식
   this.add.image(1280,800,"k85").setScale(2.5).setDepth(8);
@@ -192,7 +193,7 @@ const config={
 new Phaser.Game(config);
 
 // 새 버전이 배포되면 10초 이내 자동 새로고침
-const APP_VERSION="11";
+const APP_VERSION="12";
 setInterval(async()=>{
  try{
   const r=await fetch("./version.json?t="+Date.now(),{cache:"no-store"});
