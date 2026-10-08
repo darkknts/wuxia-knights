@@ -1,0 +1,28 @@
+{
+  "attacks": {
+    "east_warrior": {
+      "name": "청룡언월도 휘두르기",
+      "durationMs": 620,
+      "frames": ["ready", "windup", "wide_swing", "recover"],
+      "effect": "melee_slash"
+    },
+    "east_archer": {
+      "name": "동양 활 발사",
+      "durationMs": 680,
+      "frames": ["draw", "aim", "release", "recover"],
+      "effect": "arrow_shot"
+    },
+    "west_knight": {
+      "name": "기사 검 내려치기",
+      "durationMs": 600,
+      "frames": ["ready", "raise", "slash_down", "recover"],
+      "effect": "heavy_slash"
+    },
+    "west_archer": {
+      "name": "서양 활 발사",
+      "durationMs": 680,
+      "frames": ["draw", "aim", "release", "recover"],
+      "effect": "arrow_shot"
+    }
+  }
+}
