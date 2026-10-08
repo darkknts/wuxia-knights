@@ -1,20 +1,19 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64" shape-rendering="crispEdges">
+<!-- chibi female base: skin only -->
+<g fill="#2a2522">
+  <path d="M23 6h18v2h4v5h2v13h-4v7h2v13h-5v16H34V46h-4v16H23V46h-5V33h2v-7h-4V13h2V9h5z"/>
+</g>
 <g fill="#f2c6a5">
-  <rect x="23" y="5" width="18" height="21"/>
-  <rect x="19" y="11" width="4" height="14"/><rect x="41" y="11" width="4" height="14"/>
-  <rect x="20" y="26" width="24" height="15"/>
-  <rect x="23" y="41" width="7" height="17"/><rect x="34" y="41" width="7" height="17"/>
+  <path d="M24 8h16v2h4v4h1v10h-4v5H23v-5h-4V14h1V10h4z"/>
+  <rect x="28" y="28" width="8" height="6"/>
+  <rect x="20" y="31" width="4" height="12"/>
+  <rect x="40" y="31" width="4" height="12"/>
+  <path d="M23 44h8v17h-7V57h-1zM33 44h8v17h-7V57h-1z"/>
 </g>
-<g fill="#4b3029">
-  <rect x="23" y="5" width="18" height="4"/><rect x="19" y="9" width="4" height="17"/><rect x="41" y="9" width="4" height="17"/>
-  <rect x="25" y="7" width="14" height="3"/>
-</g>
-<g fill="#2b2220">
-  <rect x="26" y="14" width="3" height="4"/><rect x="35" y="14" width="3" height="4"/>
-  <rect x="30" y="20" width="4" height="2"/>
-</g>
-<g fill="#e9b993">
-  <rect x="20" y="28" width="4" height="12"/><rect x="40" y="28" width="4" height="12"/>
-  <rect x="24" y="41" width="6" height="3"/><rect x="34" y="41" width="6" height="3"/>
+<g fill="#e4a982">
+  <rect x="19" y="15" width="3" height="7"/>
+  <rect x="42" y="15" width="3" height="7"/>
+  <rect x="20" y="38" width="3" height="5"/>
+  <rect x="41" y="38" width="3" height="5"/>
 </g>
 </svg>
