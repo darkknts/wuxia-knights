@@ -1,0 +1,42 @@
+{
+  "reactions": {
+    "hit": {
+      "loop": false,
+      "durationMs": 280,
+      "motion": "backstep_shake",
+      "keyframes": [
+        { "x": 0, "y": 0, "rotate": 0, "opacity": 1 },
+        { "x": -2, "y": 0, "rotate": -3, "opacity": 1 },
+        { "x": 3, "y": -1, "rotate": 3, "opacity": 1 },
+        { "x": -1, "y": 0, "rotate": 0, "opacity": 1 }
+      ]
+    },
+    "death": {
+      "loop": false,
+      "durationMs": 720,
+      "motion": "fall_fade",
+      "keyframes": [
+        { "x": 0, "y": 0, "rotate": 0, "scale": 1, "opacity": 1 },
+        { "x": 2, "y": 1, "rotate": 12, "scale": 1, "opacity": 1 },
+        { "x": 5, "y": 8, "rotate": 48, "scale": 0.96, "opacity": 0.82 },
+        { "x": 8, "y": 16, "rotate": 82, "scale": 0.9, "opacity": 0 }
+      ]
+    },
+    "respawn": {
+      "loop": false,
+      "durationMs": 520,
+      "motion": "fade_in",
+      "keyframes": [
+        { "x": 0, "y": 4, "scale": 0.92, "opacity": 0 },
+        { "x": 0, "y": 1, "scale": 0.98, "opacity": 0.7 },
+        { "x": 0, "y": 0, "scale": 1, "opacity": 1 }
+      ]
+    }
+  },
+  "designRules": {
+    "frameCanvas": "64x64",
+    "sharedTiming": true,
+    "jobIndependent": true,
+    "equipmentStaysAttached": true
+  }
+}
