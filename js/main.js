@@ -6,7 +6,7 @@ class WorldScene extends Phaser.Scene{
 
  preload(){
   // Kenney Tiny Dungeon - 실제 16x16 PNG 에셋
-  const tiles=[1,2,3,4,5,13,15,16,17,25,26,27,28,29,40,48,49,57,59,85,86];
+  const tiles=[1,2,3,4,5,13,15,16,17,25,26,27,28,29,40,48,49,57,59,84,85,86];
   tiles.forEach(n=>{
    const id=String(n).padStart(4,"0");
    this.load.image("k"+n,KENNEY+"tile_"+id+".png");
@@ -22,6 +22,8 @@ class WorldScene extends Phaser.Scene{
 
   this.drawMap();
   this.createPlayer();
+  this.createMonsters();
+  this.createCombatUI();
   this.createTouchControls();
 
   this.keys=this.input.keyboard.addKeys("W,A,S,D,UP,DOWN,LEFT,RIGHT");
@@ -99,6 +101,105 @@ class WorldScene extends Phaser.Scene{
   this.playerSprite=this.add.image(0,0,"k86").setScale(3);
   this.player.add(this.playerSprite);
   this.playerSpeed=220;
+  this.playerHP=100;
+  this.walkTime=0;
+ }
+
+ createMonsters(){
+  this.monsters=[];
+  const spots=[
+   {x:760,y:520,name:"산적",hp:30,atk:5},
+   {x:1800,y:720,name:"해골병",hp:36,atk:6},
+   {x:820,y:1210,name:"고블린",hp:28,atk:4},
+   {x:1810,y:1190,name:"던전 수호자",hp:45,atk:8}
+  ];
+  spots.forEach((s,i)=>{
+   const m=this.add.container(s.x,s.y).setDepth(45);
+   const sprite=this.add.image(0,0,i===3?"k84":"k85").setScale(2.6);
+   m.add(sprite);
+   const tag=this.add.text(0,32,s.name,{fontSize:"13px",color:"#fff",fontStyle:"bold",stroke:"#201812",strokeThickness:4}).setOrigin(.5);
+   m.add(tag);
+   m.setDataEnabled();
+   m.setData("name",s.name);m.setData("hp",s.hp);m.setData("maxHp",s.hp);m.setData("atk",s.atk);m.setData("alive",true);
+   this.monsters.push(m);
+  });
+ }
+
+ createCombatUI(){
+  this.combat={active:false,target:null,turn:false};
+  const shade=this.add.rectangle(0,0,this.scale.width,this.scale.height,0x0b0806,.82)
+   .setOrigin(0).setScrollFactor(0).setDepth(500).setVisible(false);
+  const panel=this.add.rectangle(this.scale.width/2,this.scale.height/2,Math.min(560,this.scale.width-36),Math.min(430,this.scale.height-120),0x241a13,.98)
+   .setOrigin(.5).setScrollFactor(0).setDepth(501).setVisible(false);
+  const title=this.add.text(this.scale.width/2,130,"전투",{
+   fontSize:"30px",color:"#f8e8c9",fontStyle:"bold",stroke:"#120e0b",strokeThickness:6
+  }).setOrigin(.5).setScrollFactor(0).setDepth(502).setVisible(false);
+  const enemy=this.add.text(this.scale.width/2,185,"",{
+   fontSize:"21px",color:"#fff",fontStyle:"bold",align:"center"
+  }).setOrigin(.5).setScrollFactor(0).setDepth(502).setVisible(false);
+  const status=this.add.text(this.scale.width/2,225,"",{
+   fontSize:"15px",color:"#d9c4a1",align:"center",wordWrap:{width:Math.min(480,this.scale.width-70)}
+  }).setOrigin(.5).setScrollFactor(0).setDepth(502).setVisible(false);
+  const attack=this.add.text(this.scale.width/2,320,"공격",{
+   fontSize:"20px",color:"#fff",backgroundColor:"#70472d",padding:{x:34,y:14},
+   fontStyle:"bold"
+  }).setOrigin(.5).setScrollFactor(0).setDepth(503).setInteractive({useHandCursor:true}).setVisible(false);
+  const run=this.add.text(this.scale.width/2,390,"도망가기",{
+   fontSize:"16px",color:"#ead9bd",backgroundColor:"#3a2a20",padding:{x:22,y:10}
+  }).setOrigin(.5).setScrollFactor(0).setDepth(503).setInteractive({useHandCursor:true}).setVisible(false);
+
+  this.combatUI={shade,panel,title,enemy,status,attack,run};
+  attack.on("pointerdown",()=>this.combatAttack());
+  run.on("pointerdown",()=>this.endCombat(false));
+
+  const resize=()=>{
+   shade.setSize(this.scale.width,this.scale.height);
+   panel.setPosition(this.scale.width/2,this.scale.height/2);
+   title.setPosition(this.scale.width/2,Math.max(90,this.scale.height*.20));
+   enemy.setPosition(this.scale.width/2,Math.max(145,this.scale.height*.29));
+   status.setPosition(this.scale.width/2,Math.max(190,this.scale.height*.36));
+   attack.setPosition(this.scale.width/2,Math.max(280,this.scale.height*.55));
+   run.setPosition(this.scale.width/2,Math.max(350,this.scale.height*.68));
+  };
+  resize();this.scale.on("resize",resize);
+ }
+
+ startCombat(monster){
+  if(this.combat.active||!monster.getData("alive"))return;
+  this.combat.active=true;this.combat.target=monster;
+  this.physics?.pause?.();
+  const u=this.combatUI;
+  [u.shade,u.panel,u.title,u.enemy,u.status,u.attack,u.run].forEach(x=>x.setVisible(true));
+  u.enemy.setText(monster.getData("name")+"  ·  HP "+monster.getData("hp")+"/"+monster.getData("maxHp"));
+  u.status.setText("무명 · HP "+this.playerHP+"/100\n적을 공격해서 쓰러뜨리세요.");
+ }
+
+ combatAttack(){
+  if(!this.combat.active||!this.combat.target)return;
+  const m=this.combat.target;
+  let hp=Math.max(0,m.getData("hp")-14);
+  m.setData("hp",hp);
+  if(hp<=0){
+   m.setData("alive",false);
+   m.setVisible(false);
+   this.combatUI.status.setText("승리! 경험치와 금화를 획득했습니다.");
+   this.time.delayedCall(700,()=>this.endCombat(true));
+   return;
+  }
+  this.playerHP=Math.max(0,this.playerHP-m.getData("atk"));
+  this.combatUI.enemy.setText(m.getData("name")+"  ·  HP "+hp+"/"+m.getData("maxHp"));
+  this.combatUI.status.setText("공격 성공!\n무명 · HP "+this.playerHP+"/100");
+  if(this.playerHP<=0){
+   this.combatUI.status.setText("패배했습니다. 다시 일어섭니다.");
+   this.time.delayedCall(900,()=>{this.playerHP=100;this.endCombat(false)});
+  }
+ }
+
+ endCombat(win){
+  this.combat.active=false;this.combat.target=null;
+  const u=this.combatUI;
+  [u.shade,u.panel,u.title,u.enemy,u.status,u.attack,u.run].forEach(x=>x.setVisible(false));
+  if(win)this.playerHP=100;
  }
 
  createTouchControls(){
@@ -160,6 +261,7 @@ class WorldScene extends Phaser.Scene{
  }
 
  update(){
+  if(this.combat?.active)return;
   let dx=0,dy=0;
   if(this.keys.A.isDown||this.keys.LEFT.isDown)dx--;
   if(this.keys.D.isDown||this.keys.RIGHT.isDown)dx++;
@@ -168,6 +270,10 @@ class WorldScene extends Phaser.Scene{
   dx+=this.joystick.x;dy+=this.joystick.y;
 
   if(dx||dy){
+   this.walkTime+=this.game.loop.delta;
+   const step=Math.sin(this.walkTime/70)*2.2;
+   this.playerSprite.y=step;
+   this.playerSprite.scale=3+Math.abs(Math.sin(this.walkTime/70))*0.04;
    const l=Math.hypot(dx,dy);
    this.player.x=Phaser.Math.Clamp(
     this.player.x+dx/l*this.playerSpeed*this.game.loop.delta/1000,110,2450
@@ -175,6 +281,18 @@ class WorldScene extends Phaser.Scene{
    this.player.y=Phaser.Math.Clamp(
     this.player.y+dy/l*this.playerSpeed*this.game.loop.delta/1000,110,1490
    );
+  }else{
+   this.playerSprite.y=0;
+   this.playerSprite.scale=3;
+  }
+
+  if(!this.combat?.active){
+   for(const m of this.monsters){
+    if(m.getData("alive")&&Phaser.Math.Distance.Between(this.player.x,this.player.y,m.x,m.y)<58){
+     this.startCombat(m);
+     break;
+    }
+   }
   }
  }
 }
@@ -193,7 +311,7 @@ const config={
 new Phaser.Game(config);
 
 // 새 버전이 배포되면 10초 이내 자동 새로고침
-const APP_VERSION="12";
+const APP_VERSION="13";
 setInterval(async()=>{
  try{
   const r=await fetch("./version.json?t="+Date.now(),{cache:"no-store"});
