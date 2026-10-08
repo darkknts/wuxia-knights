@@ -123,8 +123,9 @@ $("create").onclick=()=>{
 
 function render(){
  const j=JOBS[jobId],s=$("sprite");s.innerHTML="";s.style.transform="";s.style.opacity="1";
- const prefix=jobId==="east_warrior"?"east-warrior":jobId==="east_archer"?"east-archer":jobId==="west_knight"?"west-knight":"west-archer";
- const i=document.createElement("img");i.src="./assets/characters/assembled/"+prefix+"-"+gender+".svg?v=20261008-assembled";i.alt=gender+" "+j.name;s.appendChild(i);
+ const parts=j.parts[gender];
+ parts.forEach(p=>{const i=document.createElement("img");const ext=p.endsWith(".png")?"":".svg";i.src="./assets/characters/"+p+ext+"?v=20261008-layered";i.alt=p;s.appendChild(i)});
+ j.gear.forEach(p=>{const i=document.createElement("img");i.src="./assets/characters/"+p+".svg?v=20261008-layered";i.alt=p;s.appendChild(i)});
  $("characterName").textContent=characterName;$("characterJob").textContent=j.faction+" · "+j.name;
 }
 function idle(){clearBubble();playCharacterAnimation($("sprite"),"idle");setStatus("대기 모션 재생")}
