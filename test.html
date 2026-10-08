@@ -87,10 +87,10 @@ import { playJobAttack } from "./js/character/job-attack-animation.js";
 import { playCharacterReaction } from "./js/character/character-reaction.js";
 
 const JOBS={
- east_warrior:{name:"무사",faction:"동양",gender:"both",parts:{male:["male/male-base","faces/default-male","hair/male-tied"],female:["female/female-base","faces/default-female","hair/female-ponytail"]},gear:["clothes/east-warrior-basic","weapons/azure-dragon-glaive-basic"]},
- east_archer:{name:"궁수",faction:"동양",gender:"both",parts:{male:["male/male-base","faces/default-male","hair/male-long"],female:["female/female-base","faces/default-female","hair/female-long"]},gear:["clothes/east-archer-basic","weapons/east-bow-basic"]},
- west_knight:{name:"기사",faction:"서양",gender:"both",parts:{male:["male/male-base","faces/default-male","hair/male-short"],female:["female/female-base","faces/default-female","hair/female-short"]},gear:["clothes/west-knight-basic","shields/knight-shield-basic","weapons/knight-sword-basic"]},
- west_archer:{name:"아처",faction:"서양",gender:"both",parts:{male:["male/male-base","faces/default-male","hair/male-short"],female:["female/female-base","faces/default-female","hair/female-short"]},gear:["clothes/west-archer-basic","weapons/west-bow-basic"]}
+ east_warrior:{name:"무사",faction:"동양",gender:"both",parts:{male:["male/male-base","faces/default-male","hair/male-tied"],female:["female/female-base.png","faces/default-female","hair/female-ponytail"]},gear:["clothes/east-warrior-basic","weapons/azure-dragon-glaive-basic"]},
+ east_archer:{name:"궁수",faction:"동양",gender:"both",parts:{male:["male/male-base","faces/default-male","hair/male-long"],female:["female/female-base.png","faces/default-female","hair/female-long"]},gear:["clothes/east-archer-basic","weapons/east-bow-basic"]},
+ west_knight:{name:"기사",faction:"서양",gender:"both",parts:{male:["male/male-base","faces/default-male","hair/male-short"],female:["female/female-base.png","faces/default-female","hair/female-short"]},gear:["clothes/west-knight-basic","shields/knight-shield-basic","weapons/knight-sword-basic"]},
+ west_archer:{name:"아처",faction:"서양",gender:"both",parts:{male:["male/male-base","faces/default-male","hair/male-short"],female:["female/female-base.png","faces/default-female","hair/female-short"]},gear:["clothes/west-archer-basic","weapons/west-bow-basic"]}
 };
 
 let gender="male",jobId="east_warrior",characterName="무명",currentAnimation=0;
@@ -127,7 +127,7 @@ function render(){
    const i=document.createElement("img");i.src="./assets/characters/assembled/east-warrior-male.svg?v=20261008-2";i.alt="남성 무사";s.appendChild(i);
  }else{
    const paths=[...j.parts[gender],...j.gear];
-   paths.forEach(p=>{const i=document.createElement("img");i.src="./assets/characters/"+p+".svg";s.appendChild(i)});
+   paths.forEach(p=>{const i=document.createElement("img");const ext=p.endsWith(".png")?"":".svg";i.src="./assets/characters/"+p+ext;s.appendChild(i)});
  }
  $("characterName").textContent=characterName;$("characterJob").textContent=j.faction+" · "+j.name;
 }
