@@ -113,8 +113,8 @@ class WorldScene extends Phaser.Scene{
   this.player.add(this.weapon);
 
   this.slash=this.add.graphics().setVisible(false);
-  this.slash.lineStyle(5,0xffe4a3,0.9);
-  this.slash.arc(0,0,38,-1.0,0.9,false);
+  this.slash.lineStyle(3,0xffe4a3,0.9);
+  this.slash.arc(0,0,40,-0.85,0.85,false);
   this.slash.setPosition(0,-2);
   this.player.add(this.slash);
 
@@ -154,27 +154,30 @@ class WorldScene extends Phaser.Scene{
 
   const dx=monster.x-this.player.x;
   const dy=monster.y-this.player.y;
-  this.player.rotation=Math.atan2(dy,dx);
-
+  // 캐릭터 본체는 정면을 유지하고, 무기만 적 방향으로 휘두른다.
+  const attackAngle=Math.atan2(dy,dx);
+  this.weapon.setPosition(Math.cos(attackAngle)*16,Math.sin(attackAngle)*16);
+  this.weapon.setRotation(attackAngle-1.25);
+  this.slash.setPosition(Math.cos(attackAngle)*18,Math.sin(attackAngle)*18);
+  this.slash.setRotation(attackAngle);
   this.slash.setVisible(true);
   this.weapon.setVisible(true);
 
   // 검을 크게 휘두르는 420ms 공격 애니메이션
   this.tweens.add({
    targets:this.weapon,
-   rotation:{from:-1.35,to:1.15},
-   duration:420,
+   rotation:attackAngle+0.95,
+   duration:260,
    ease:"Cubic.easeOut",
    onComplete:()=>{
     this.slash.setVisible(false);
-    this.weapon.setRotation(-1.05);
    }
   });
 
   this.tweens.add({
    targets:this.playerSprite,
-   scaleX:3.35,scaleY:2.8,
-   duration:110,yoyo:true,ease:"Quad.easeOut"
+   x:4,scaleX:3.12,scaleY:2.9,
+   duration:90,yoyo:true,ease:"Quad.easeOut"
   });
 
   // 타격 시점
@@ -311,7 +314,7 @@ const config={
 new Phaser.Game(config);
 
 // 새 버전이 배포되면 10초 이내 자동 새로고침
-const APP_VERSION="14";
+const APP_VERSION="15";
 setInterval(async()=>{
  try{
   const r=await fetch("./version.json?t="+Date.now(),{cache:"no-store"});
