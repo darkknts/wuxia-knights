@@ -24,27 +24,29 @@ g.fillStyle(0x4f8490,.9);g.fillRect(1750,100,260,420);this.add.text(1880,310,"�
 }
 tree(x,y){const c=this.add.graphics();c.fillStyle(0x315a37);c.fillCircle(x,y,38);c.fillStyle(0x704d32);c.fillRect(x-8,y+28,16,35);c.setDepth(5)}
 createTouchControls(){
-const old=document.getElementById("touch-ui");if(old)old.remove();
-const ui=document.createElement("div");ui.id="touch-ui";ui.innerHTML='<div id="joy-base"><div id="joy-knob"></div></div>';
-document.body.appendChild(ui);
-const base=document.getElementById("joy-base"),knob=document.getElementById("joy-knob");
-const state=this.joystick, radius=55;
-const move=(e)=>{
-const p=e.touches?e.touches[0]:e;
-const r=base.getBoundingClientRect(),cx=r.left+r.width/2,cy=r.top+r.height/2;
-let dx=p.clientX-cx,dy=p.clientY-cy,d=Math.hypot(dx,dy);
-if(d>radius){dx=dx/d*radius;dy=dy/d*radius}
-state.x=dx/radius;state.y=dy/radius;
-knob.style.transform=`translate(calc(-50% + ${dx}px),calc(-50% + ${dy}px))`;
+const w=this.scale.width,h=this.scale.height;
+const base=this.add.circle(90,h-82,58,0x171411,.82).setStrokeStyle(4,0xd5b16d,.95).setScrollFactor(0).setDepth(200);
+const knob=this.add.circle(90,h-82,27,0xd5b16d,.95).setStrokeStyle(3,0xffedc2,.95).setScrollFactor(0).setDepth(201);
+this.add.text(90,h-16,"이동",{fontSize:"13px",color:"#fff",fontStyle:"bold",backgroundColor:"#171411cc",padding:{x:8,y:4}}).setOrigin(.5).setScrollFactor(0).setDepth(202);
+const center={x:90,y:h-82},radius=58,knobRadius=34;
+const place=()=>{
+center.x=Math.max(76,Math.min(92,this.scale.width*.14));
+center.y=this.scale.height-82;
+base.setPosition(center.x,center.y);knob.setPosition(center.x,center.y);
 };
-const release=()=>{state.active=false;state.x=0;state.y=0;knob.style.transform="translate(-50%,-50%)"};
-base.addEventListener("touchstart",e=>{e.preventDefault();state.active=true;move(e)}, {passive:false});
-base.addEventListener("touchmove",e=>{e.preventDefault();if(state.active)move(e)}, {passive:false});
-base.addEventListener("touchend",release);
-base.addEventListener("touchcancel",release);
-base.addEventListener("pointerdown",e=>{state.active=true;move(e)});
-base.addEventListener("pointermove",e=>{if(state.active)move(e)});
-window.addEventListener("pointerup",release);
+place();this.scale.on("resize",place);
+const move=p=>{
+let dx=p.x-center.x,dy=p.y-center.y,d=Math.hypot(dx,dy);
+if(d>knobRadius){dx=dx/d*knobRadius;dy=dy/d*knobRadius}
+this.joystick.x=dx/knobRadius;this.joystick.y=dy/knobRadius;
+knob.setPosition(center.x+dx,center.y+dy);
+};
+const release=()=>{this.joystick.active=false;this.joystick.x=0;this.joystick.y=0;knob.setPosition(center.x,center.y)};
+base.on("pointerdown",p=>{this.joystick.active=true;move(p)});
+this.input.on("pointermove",p=>{if(this.joystick.active)move(p)});
+this.input.on("pointerup",release);
+this.input.on("pointerupoutside",release);
+this.input.addPointer(2);
 }
 update(){
 let dx=0,dy=0;if(this.keys.A.isDown||this.keys.LEFT.isDown)dx--;if(this.keys.D.isDown||this.keys.RIGHT.isDown)dx++;if(this.keys.W.isDown||this.keys.UP.isDown)dy--;if(this.keys.S.isDown||this.keys.DOWN.isDown)dy++;
