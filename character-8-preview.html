@@ -20,6 +20,16 @@ const chars=[
 ["east-archer-male","남성 궁수","동양"],["east-archer-female","여성 궁수","동양"],
 ["west-knight-male","남성 기사","서양"],["west-knight-female","여성 기사","서양"],
 ["west-archer-male","남성 아처","서양"],["west-archer-female","여성 아처","서양"]];
-document.getElementById("grid").innerHTML=chars.map(([id,name,faction])=>`<article class="card"><div class="stage"><img src="./assets/characters/assembled/${id}.svg?v=20261008-assembled"></div><div class="name">${name}</div><div class="meta">${faction} · 초보자 기본 장비</div></article>`).join("");
+const layers={
+"east-warrior":["clothes/east-warrior-basic","weapons/azure-dragon-glaive-basic"],
+"east-archer":["clothes/east-archer-basic","weapons/east-bow-basic"],
+"west-knight":["clothes/west-knight-basic","shields/knight-shield-basic","weapons/knight-sword-basic"],
+"west-archer":["clothes/west-archer-basic","weapons/west-bow-basic"]};
+const jobs={male:["male/male-base","faces/default-male"],female:["female/female-base.png","faces/default-female"]};
+document.getElementById("grid").innerHTML=chars.map(([id,name,faction])=>{
+ const gender=id.endsWith("male")?"male":"female"; const job=id.replace("-male","").replace("-female","");
+ const imgs=[...jobs[gender],...(layers[job]||[])].map(p=>{const ext=p.endsWith(".png")?"":".svg";return '<img src="./assets/characters/'+p+ext+'?v=20261008-layered">';}).join("");
+ return '<article class="card"><div class="stage">'+imgs+'</div><div class="name">'+name+'</div><div class="meta">'+faction+' · 초보자 기본 장비</div></article>';
+}).join("");
 </script>
 </body></html>
