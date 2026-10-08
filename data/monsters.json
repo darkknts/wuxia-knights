@@ -30,7 +30,7 @@
       "faction": "서양",
       "role": "melee",
       "level": 1,
-      "asset": "assets/monsters/west-skeleton.png",
+      "asset": "assets/monsters/west-skeleton-fixed.svg",
       "description": "검과 방패를 사용하는 서양 진영 초반 몬스터"
     },
     {
