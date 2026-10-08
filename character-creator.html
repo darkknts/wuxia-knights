@@ -6,27 +6,22 @@
 <link rel="stylesheet" href="./css/style.css">
 <style>
 .creator{width:min(94vw,1000px);margin:24px auto;padding:28px;background:#181818;border:2px solid #6c5634}
-.controls{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin:24px 0}
-.control{background:#24201b;padding:18px;border:1px solid #6c5634}
-.control h3{margin:0 0 12px}.choices{display:flex;gap:8px;flex-wrap:wrap}
-.choice{padding:10px 16px;background:#151515;color:#eee;border:1px solid #6c5634;cursor:pointer}.choice.active{background:#6c5634}
+.controls{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin:24px 0}.control{background:#24201b;padding:18px;border:1px solid #6c5634}
+.control h3{margin:0 0 12px}.choices{display:flex;gap:8px;flex-wrap:wrap}.choice{padding:10px 16px;background:#151515;color:#eee;border:1px solid #6c5634;cursor:pointer}.choice.active{background:#6c5634}
 .stage{display:flex;align-items:center;justify-content:center;min-height:360px;background:repeating-conic-gradient(#302d29 0 25%,#24221f 0 50%) 0/48px 48px;border:1px solid #6c5634}
 .sprite{position:relative;width:256px;height:256px;image-rendering:pixelated}.sprite img{position:absolute;inset:0;width:100%;height:100%;image-rendering:pixelated}
 .info{text-align:center;margin-top:18px}.job{font-size:28px}.faction{color:#bda57d}
+.namebox{margin:18px auto 0;max-width:420px}.namebox input{width:100%;padding:12px;background:#111;color:#eee;border:1px solid #6c5634;font-size:16px}
+.create{display:block;margin:18px auto 0;padding:13px 38px;border:2px solid #b38b4b;background:#2d2216;color:#f8ecd8;font-size:18px;cursor:pointer}.create:hover{background:#42301d}
+.result{display:none;margin-top:18px;padding:14px;text-align:center;border:1px solid #6c5634;background:#24201b;color:#d8d0c2}
 @media(max-width:650px){.controls{grid-template-columns:1fr}}
-</style>
-</head>
-<body>
-<main class="creator">
-<p class="eyebrow">STEP 2-4 · CHARACTER CREATION</p>
-<h1>캐릭터 생성</h1>
-<p class="subtitle">성별과 직업을 선택하면 기본 바디에 얼굴, 헤어, 의상, 무기가 자동으로 조합됩니다.</p>
-<div class="controls">
-<section class="control"><h3>성별</h3><div class="choices" id="gender"></div></section>
-<section class="control"><h3>직업</h3><div class="choices" id="job"></div></section>
-</div>
+</style></head>
+<body><main class="creator">
+<p class="eyebrow">STEP 2-4 · CHARACTER CREATION</p><h1>캐릭터 생성</h1>
+<p class="subtitle">성별과 직업을 선택하고 이름을 정하면 나만의 캐릭터가 생성됩니다.</p>
+<div class="controls"><section class="control"><h3>성별</h3><div class="choices" id="gender"></div></section><section class="control"><h3>직업</h3><div class="choices" id="job"></div></section></div>
 <div class="stage"><div class="sprite" id="sprite"></div></div>
 <div class="info"><div class="job" id="name"></div><div class="faction" id="faction"></div></div>
-</main>
-<script type="module" src="./js/character/character-creator.js"></script>
-</body></html>
+<div class="namebox"><input id="characterName" maxlength="12" placeholder="캐릭터 이름 (최대 12자)"></div>
+<button class="create" id="createButton">캐릭터 생성</button><div class="result" id="result"></div>
+</main><script type="module" src="./js/character/character-creator.js"></script></body></html>
