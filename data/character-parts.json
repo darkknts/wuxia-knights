@@ -1,0 +1,22 @@
+{
+  "layers": [
+    { "id": "body", "order": 10, "description": "남/여 기본 바디" },
+    { "id": "face", "order": 20, "description": "얼굴/표정" },
+    { "id": "hair", "order": 30, "description": "헤어스타일" },
+    { "id": "clothes", "order": 40, "description": "기본 의상" },
+    { "id": "armor", "order": 50, "description": "직업/장비 갑옷" },
+    { "id": "gloves", "order": 60, "description": "장갑" },
+    { "id": "boots", "order": 70, "description": "신발" },
+    { "id": "weapon", "order": 80, "description": "주무기" },
+    { "id": "shield", "order": 90, "description": "방패" },
+    { "id": "cape", "order": 100, "description": "망토/장식" },
+    { "id": "effect", "order": 110, "description": "스킬 이펙트" },
+    { "id": "speech", "order": 120, "description": "사용자 지정 말풍선" }
+  ],
+  "renderRule": {
+    "canvas": "64x64",
+    "anchor": "bottom-center",
+    "pixelPerfect": true,
+    "sameCoordinateSystem": true
+  }
+}
