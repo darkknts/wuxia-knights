@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="64" height="86" viewBox="0 0 64 86">
+<image href="../male/male-base.svg" x="0" y="0" width="64" height="86" preserveAspectRatio="none" image-rendering="pixelated"/>
+<image href="../clothes/west-knight-basic.svg" x="0" y="0" width="64" height="64" preserveAspectRatio="none" image-rendering="pixelated"/>
+<image href="../shields/knight-shield-basic.svg" x="0" y="0" width="64" height="64" preserveAspectRatio="none" image-rendering="pixelated"/>
+<image href="../weapons/knight-sword-basic.svg" x="0" y="0" width="64" height="64" preserveAspectRatio="none" image-rendering="pixelated"/>
+</svg>
