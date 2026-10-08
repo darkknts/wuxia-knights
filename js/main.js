@@ -23,7 +23,6 @@ class WorldScene extends Phaser.Scene{
   this.drawMap();
   this.createPlayer();
   this.createMonsters();
-  this.createCombatUI();
   this.createTouchControls();
 
   this.keys=this.input.keyboard.addKeys("W,A,S,D,UP,DOWN,LEFT,RIGHT");
@@ -100,9 +99,31 @@ class WorldScene extends Phaser.Scene{
   this.player=this.add.container(1280,800).setDepth(50);
   this.playerSprite=this.add.image(0,0,"k86").setScale(3);
   this.player.add(this.playerSprite);
+
+  // 플레이어 손에 들린 검: 접근하면 실제로 휘두르는 모션
+  this.weapon=this.add.graphics();
+  this.weapon.fillStyle(0xe9e3d4,1);
+  this.weapon.fillRect(-3,-30,6,27);
+  this.weapon.fillStyle(0x9b7045,1);
+  this.weapon.fillRect(-5,-5,10,4);
+  this.weapon.fillStyle(0x4b3020,1);
+  this.weapon.fillRect(-2,0,4,12);
+  this.weapon.setPosition(18,-2);
+  this.weapon.setRotation(-1.05);
+  this.player.add(this.weapon);
+
+  this.slash=this.add.graphics().setVisible(false);
+  this.slash.lineStyle(5,0xffe4a3,0.9);
+  this.slash.arc(0,0,38,-1.0,0.9,false);
+  this.slash.setPosition(0,-2);
+  this.player.add(this.slash);
+
   this.playerSpeed=220;
   this.playerHP=100;
   this.walkTime=0;
+  this.attackCooldown=0;
+  this.attackTimer=0;
+  this.attackTarget=null;
  }
 
  createMonsters(){
@@ -125,81 +146,57 @@ class WorldScene extends Phaser.Scene{
   });
  }
 
- createCombatUI(){
-  this.combat={active:false,target:null,turn:false};
-  const shade=this.add.rectangle(0,0,this.scale.width,this.scale.height,0x0b0806,.82)
-   .setOrigin(0).setScrollFactor(0).setDepth(500).setVisible(false);
-  const panel=this.add.rectangle(this.scale.width/2,this.scale.height/2,Math.min(560,this.scale.width-36),Math.min(430,this.scale.height-120),0x241a13,.98)
-   .setOrigin(.5).setScrollFactor(0).setDepth(501).setVisible(false);
-  const title=this.add.text(this.scale.width/2,130,"전투",{
-   fontSize:"30px",color:"#f8e8c9",fontStyle:"bold",stroke:"#120e0b",strokeThickness:6
-  }).setOrigin(.5).setScrollFactor(0).setDepth(502).setVisible(false);
-  const enemy=this.add.text(this.scale.width/2,185,"",{
-   fontSize:"21px",color:"#fff",fontStyle:"bold",align:"center"
-  }).setOrigin(.5).setScrollFactor(0).setDepth(502).setVisible(false);
-  const status=this.add.text(this.scale.width/2,225,"",{
-   fontSize:"15px",color:"#d9c4a1",align:"center",wordWrap:{width:Math.min(480,this.scale.width-70)}
-  }).setOrigin(.5).setScrollFactor(0).setDepth(502).setVisible(false);
-  const attack=this.add.text(this.scale.width/2,320,"공격",{
-   fontSize:"20px",color:"#fff",backgroundColor:"#70472d",padding:{x:34,y:14},
-   fontStyle:"bold"
-  }).setOrigin(.5).setScrollFactor(0).setDepth(503).setInteractive({useHandCursor:true}).setVisible(false);
-  const run=this.add.text(this.scale.width/2,390,"도망가기",{
-   fontSize:"16px",color:"#ead9bd",backgroundColor:"#3a2a20",padding:{x:22,y:10}
-  }).setOrigin(.5).setScrollFactor(0).setDepth(503).setInteractive({useHandCursor:true}).setVisible(false);
+ startMelee(monster){
+  if(this.attackCooldown>0 || !monster.getData("alive"))return;
+  this.attackTarget=monster;
+  this.attackCooldown=650;
+  this.attackTimer=0;
 
-  this.combatUI={shade,panel,title,enemy,status,attack,run};
-  attack.on("pointerdown",()=>this.combatAttack());
-  run.on("pointerdown",()=>this.endCombat(false));
+  const dx=monster.x-this.player.x;
+  const dy=monster.y-this.player.y;
+  this.player.rotation=Math.atan2(dy,dx);
 
-  const resize=()=>{
-   shade.setSize(this.scale.width,this.scale.height);
-   panel.setPosition(this.scale.width/2,this.scale.height/2);
-   title.setPosition(this.scale.width/2,Math.max(90,this.scale.height*.20));
-   enemy.setPosition(this.scale.width/2,Math.max(145,this.scale.height*.29));
-   status.setPosition(this.scale.width/2,Math.max(190,this.scale.height*.36));
-   attack.setPosition(this.scale.width/2,Math.max(280,this.scale.height*.55));
-   run.setPosition(this.scale.width/2,Math.max(350,this.scale.height*.68));
-  };
-  resize();this.scale.on("resize",resize);
- }
+  this.slash.setVisible(true);
+  this.weapon.setVisible(true);
 
- startCombat(monster){
-  if(this.combat.active||!monster.getData("alive"))return;
-  this.combat.active=true;this.combat.target=monster;
-  this.physics?.pause?.();
-  const u=this.combatUI;
-  [u.shade,u.panel,u.title,u.enemy,u.status,u.attack,u.run].forEach(x=>x.setVisible(true));
-  u.enemy.setText(monster.getData("name")+"  ·  HP "+monster.getData("hp")+"/"+monster.getData("maxHp"));
-  u.status.setText("무명 · HP "+this.playerHP+"/100\n적을 공격해서 쓰러뜨리세요.");
- }
+  // 검을 크게 휘두르는 420ms 공격 애니메이션
+  this.tweens.add({
+   targets:this.weapon,
+   rotation:{from:-1.35,to:1.15},
+   duration:420,
+   ease:"Cubic.easeOut",
+   onComplete:()=>{
+    this.slash.setVisible(false);
+    this.weapon.setRotation(-1.05);
+   }
+  });
 
- combatAttack(){
-  if(!this.combat.active||!this.combat.target)return;
-  const m=this.combat.target;
-  let hp=Math.max(0,m.getData("hp")-14);
-  m.setData("hp",hp);
-  if(hp<=0){
-   m.setData("alive",false);
-   m.setVisible(false);
-   this.combatUI.status.setText("승리! 경험치와 금화를 획득했습니다.");
-   this.time.delayedCall(700,()=>this.endCombat(true));
-   return;
-  }
-  this.playerHP=Math.max(0,this.playerHP-m.getData("atk"));
-  this.combatUI.enemy.setText(m.getData("name")+"  ·  HP "+hp+"/"+m.getData("maxHp"));
-  this.combatUI.status.setText("공격 성공!\n무명 · HP "+this.playerHP+"/100");
-  if(this.playerHP<=0){
-   this.combatUI.status.setText("패배했습니다. 다시 일어섭니다.");
-   this.time.delayedCall(900,()=>{this.playerHP=100;this.endCombat(false)});
-  }
- }
+  this.tweens.add({
+   targets:this.playerSprite,
+   scaleX:3.35,scaleY:2.8,
+   duration:110,yoyo:true,ease:"Quad.easeOut"
+  });
 
- endCombat(win){
-  this.combat.active=false;this.combat.target=null;
-  const u=this.combatUI;
-  [u.shade,u.panel,u.title,u.enemy,u.status,u.attack,u.run].forEach(x=>x.setVisible(false));
-  if(win)this.playerHP=100;
+  // 타격 시점
+  this.time.delayedCall(220,()=>{
+   if(!monster.getData("alive"))return;
+   const hp=Math.max(0,monster.getData("hp")-15);
+   monster.setData("hp",hp);
+   monster.setScale(2.9);
+   this.tweens.add({targets:monster,alpha:0.35,duration:70,yoyo:true});
+   if(hp<=0){
+    monster.setData("alive",false);
+    this.tweens.add({
+     targets:monster,alpha:0,scaleX:0.2,scaleY:0.2,angle:120,
+     duration:300,
+     onComplete:()=>monster.destroy()
+    });
+    this.add.text(monster.x,monster.y-40,"+EXP  +GOLD",{
+     fontSize:"14px",color:"#ffe9a6",fontStyle:"bold",
+     stroke:"#24180f",strokeThickness:4
+    }).setOrigin(.5).setDepth(90);
+   }
+  });
  }
 
  createTouchControls(){
@@ -261,7 +258,7 @@ class WorldScene extends Phaser.Scene{
  }
 
  update(){
-  if(this.combat?.active)return;
+  this.attackCooldown=Math.max(0,this.attackCooldown-this.game.loop.delta);
   let dx=0,dy=0;
   if(this.keys.A.isDown||this.keys.LEFT.isDown)dx--;
   if(this.keys.D.isDown||this.keys.RIGHT.isDown)dx++;
@@ -286,13 +283,16 @@ class WorldScene extends Phaser.Scene{
    this.playerSprite.scale=3;
   }
 
-  if(!this.combat?.active){
-   for(const m of this.monsters){
-    if(m.getData("alive")&&Phaser.Math.Distance.Between(this.player.x,this.player.y,m.x,m.y)<58){
-     this.startCombat(m);
-     break;
-    }
-   }
+  // 몬스터와 가까워지면 전투창 없이 바로 검을 휘두른다.
+  let nearest=null;
+  let nearestDist=Infinity;
+  for(const m of this.monsters){
+   if(!m.active||!m.getData("alive"))continue;
+   const d=Phaser.Math.Distance.Between(this.player.x,this.player.y,m.x,m.y);
+   if(d<68&&d<nearestDist){nearest=m;nearestDist=d;}
+  }
+  if(nearest && this.attackCooldown<=0){
+   this.startMelee(nearest);
   }
  }
 }
@@ -311,7 +311,7 @@ const config={
 new Phaser.Game(config);
 
 // 새 버전이 배포되면 10초 이내 자동 새로고침
-const APP_VERSION="13";
+const APP_VERSION="14";
 setInterval(async()=>{
  try{
   const r=await fetch("./version.json?t="+Date.now(),{cache:"no-store"});
