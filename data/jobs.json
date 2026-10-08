@@ -1,0 +1,32 @@
+{
+  "jobs": [
+    {
+      "id": "east_warrior",
+      "name": "무사",
+      "faction": "동양",
+      "weapon": "청룡언월도",
+      "style": "관우·장비 계열의 듬직한 장수"
+    },
+    {
+      "id": "east_archer",
+      "name": "궁수",
+      "faction": "동양",
+      "weapon": "활",
+      "style": "날렵한 동양 궁사"
+    },
+    {
+      "id": "west_knight",
+      "name": "기사",
+      "faction": "서양",
+      "weapon": "검과 방패",
+      "style": "단단한 중장갑 기사"
+    },
+    {
+      "id": "west_archer",
+      "name": "아처",
+      "faction": "서양",
+      "weapon": "활",
+      "style": "가죽 갑옷을 갖춘 서양 궁수"
+    }
+  ]
+}
