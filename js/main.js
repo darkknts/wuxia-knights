@@ -24,23 +24,30 @@ g.fillStyle(0x4f8490,.9);g.fillRect(1750,100,260,420);this.add.text(1880,310,"�
 }
 tree(x,y){const c=this.add.graphics();c.fillStyle(0x315a37);c.fillCircle(x,y,38);c.fillStyle(0x704d32);c.fillRect(x-8,y+28,16,35);c.setDepth(5)}
 createTouchControls(){
-const ui=this.add.container(0,0).setScrollFactor(0).setDepth(200);
-const base=this.add.circle(92,625,58,0x171411,.72).setStrokeStyle(3,0xd5b16d,.7);
-const knob=this.add.circle(92,625,26,0xd5b16d,.9);
-ui.add([base,knob]);
-this.add.text(92,625,"",{fontSize:"1px"}).setOrigin(.5);
-const update=(p)=>{const dx=p.x-92,dy=p.y-625,d=Math.min(Math.hypot(dx,dy),48),a=Math.atan2(dy,dx);this.joystick.x=Math.cos(a)*(d/48);this.joystick.y=Math.sin(a)*(d/48);knob.x=92+this.joystick.x*48;knob.y=625+this.joystick.y*48};
-const release=()=>{this.joystick.active=false;this.joystick.x=0;this.joystick.y=0;knob.x=92;knob.y=625};
-base.setInteractive({useHandCursor:false});
-base.on("pointerdown",p=>{this.joystick.active=true;update(p)});
-base.on("pointermove",p=>{if(this.joystick.active)update(p)});
-this.input.on("pointermove",p=>{if(this.joystick.active)update(p)});
-this.input.on("pointerup",release);
-this.input.on("pointerout",release);
-this.add.text(92,695,"이동",{fontSize:"13px",color:"#fff",backgroundColor:"#171411aa",padding:{x:8,y:4}}).setOrigin(.5).setScrollFactor(0).setDepth(201);
+const old=document.getElementById("touch-ui");if(old)old.remove();
+const ui=document.createElement("div");ui.id="touch-ui";ui.innerHTML='<div id="joy-base"><div id="joy-knob"></div></div>';
+document.body.appendChild(ui);
+const base=document.getElementById("joy-base"),knob=document.getElementById("joy-knob");
+const state=this.joystick, radius=55;
+const move=(e)=>{
+const p=e.touches?e.touches[0]:e;
+const r=base.getBoundingClientRect(),cx=r.left+r.width/2,cy=r.top+r.height/2;
+let dx=p.clientX-cx,dy=p.clientY-cy,d=Math.hypot(dx,dy);
+if(d>radius){dx=dx/d*radius;dy=dy/d*radius}
+state.x=dx/radius;state.y=dy/radius;
+knob.style.transform=`translate(calc(-50% + ${dx}px),calc(-50% + ${dy}px))`;
+};
+const release=()=>{state.active=false;state.x=0;state.y=0;knob.style.transform="translate(-50%,-50%)"};
+base.addEventListener("touchstart",e=>{e.preventDefault();state.active=true;move(e)}, {passive:false});
+base.addEventListener("touchmove",e=>{e.preventDefault();if(state.active)move(e)}, {passive:false});
+base.addEventListener("touchend",release);
+base.addEventListener("touchcancel",release);
+base.addEventListener("pointerdown",e=>{state.active=true;move(e)});
+base.addEventListener("pointermove",e=>{if(state.active)move(e)});
+window.addEventListener("pointerup",release);
 }
 update(){
 let dx=0,dy=0;if(this.keys.A.isDown||this.keys.LEFT.isDown)dx--;if(this.keys.D.isDown||this.keys.RIGHT.isDown)dx++;if(this.keys.W.isDown||this.keys.UP.isDown)dy--;if(this.keys.S.isDown||this.keys.DOWN.isDown)dy++;
 dx+=this.joystick.x;dy+=this.joystick.y;if(dx||dy){const l=Math.hypot(dx,dy);this.player.x=Phaser.Math.Clamp(this.player.x+dx/l*this.playerSpeed*this.game.loop.delta/1000,110,2090);this.player.y=Phaser.Math.Clamp(this.player.y+dy/l*this.playerSpeed*this.game.loop.delta/1000,110,1290);this.player.list[1].y=Math.sin(this.time.now/80)*2}
 }}
-const config={type:Phaser.AUTO,parent:"game",width:1280,height:720,backgroundColor:"#18251a",scale:{mode:Phaser.Scale.FIT,autoCenter:Phaser.Scale.CENTER_BOTH},pixelArt:true,scene:[WorldScene]};boot();
+const config={type:Phaser.AUTO,parent:"game",width:1280,height:720,backgroundColor:"#18251a",scale:{mode:Phaser.Scale.RESIZE,autoCenter:Phaser.Scale.CENTER_BOTH},pixelArt:true,scene:[WorldScene]};boot();
