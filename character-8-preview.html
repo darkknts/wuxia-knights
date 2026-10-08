@@ -11,28 +11,33 @@ main{width:min(1100px,94vw);margin:32px auto}
 .grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
 .card{background:#191613;border:1px solid #5c4a2f;border-radius:8px;padding:14px;text-align:center}
 .stage{height:250px;display:grid;place-items:center;background:radial-gradient(circle,#3a3024,#151310 70%);border-radius:6px;position:relative;overflow:hidden}
-.stage img{width:192px;height:258px;image-rendering:pixelated;object-fit:fill}
+.stage .character{width:256px;height:256px;background-image:url("./assets/characters/reference/wuxia-knights-8.svg?v=20261008-final");background-repeat:no-repeat;background-size:2048px 256px;image-rendering:pixelated}
 .name{margin-top:12px;font-weight:700}.meta{color:#bda57d;font-size:13px;margin-top:4px}
 @media(max-width:850px){.grid{grid-template-columns:repeat(2,1fr)}}@media(max-width:480px){.grid{grid-template-columns:1fr}}
 </style>
 </head>
 <body><main>
-<div class="head"><h1>무협기사단 8종 캐릭터 조합</h1><p>기존 기획 이미지 기준 · 남/여 × 무사 · 궁수 · 기사 · 아처</p></div>
+<div class="head"><h1>무협기사단 8종 캐릭터 조합</h1><p>새로 제작한 캐릭터 이미지 기준 · 남/여 × 무사 · 궁수 · 기사 · 아처</p></div>
 <div class="grid" id="grid"></div>
 </main>
 <script>
-const base="./assets/characters/reference/";
 const jobs=[
- ["무사","동양","male-warrior.svg","female-warrior.svg"],
- ["궁수","동양","male-archer.svg","female-archer.svg"],
- ["기사","서양","male-knight.svg","female-knight.svg"],
- ["아처","서양","male-west-archer.svg","female-west-archer.svg"]
+ ["무사","동양",0,1],
+ ["궁수","동양",2,3],
+ ["기사","서양",4,5],
+ ["아처","서양",6,7]
 ];
 const grid=document.getElementById("grid");
 jobs.forEach(([job,faction,male,female])=>{
- [["남성",male],["여성",female]].forEach(([gender,file])=>{
+ [["남성",male],["여성",female]].forEach(([gender,index])=>{
    const card=document.createElement("article");card.className="card";
-   card.innerHTML='<div class="stage"><img src="'+base+file+'?v=20261008-ref" alt="'+gender+" "+job+'"></div><div class="name">'+gender+" "+job+'</div><div class="meta">'+faction+" · 기존 기획 이미지 기준"+'</div>';
+   const stage=document.createElement("div");stage.className="stage";
+   const character=document.createElement("div");character.className="character";
+   character.style.backgroundPosition=`-${index*256}px 0`;
+   character.setAttribute("aria-label",gender+" "+job);
+   stage.appendChild(character);
+   card.appendChild(stage);
+   card.insertAdjacentHTML("beforeend",'<div class="name">'+gender+" "+job+'</div><div class="meta">'+faction+" · 새 캐릭터 이미지"+'</div>');
    grid.appendChild(card);
  });
 });
