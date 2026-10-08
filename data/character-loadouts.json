@@ -1,0 +1,110 @@
+{
+  "loadouts": [
+    {
+      "id": "male_warrior",
+      "gender": "male",
+      "job": "east_warrior",
+      "parts": {
+        "body": "male_base",
+        "face": "default_male",
+        "hair": "male_warrior_hair",
+        "clothes": "east_warrior_clothes",
+        "armor": "east_warrior_armor",
+        "weapon": "azure_dragon_glaive"
+      }
+    },
+    {
+      "id": "female_warrior",
+      "gender": "female",
+      "job": "east_warrior",
+      "parts": {
+        "body": "female_base",
+        "face": "default_female",
+        "hair": "female_warrior_hair",
+        "clothes": "east_warrior_clothes",
+        "armor": "east_warrior_armor",
+        "weapon": "azure_dragon_glaive"
+      }
+    },
+    {
+      "id": "male_archer",
+      "gender": "male",
+      "job": "east_archer",
+      "parts": {
+        "body": "male_base",
+        "face": "default_male",
+        "hair": "male_archer_hair",
+        "clothes": "east_archer_clothes",
+        "armor": "east_archer_armor",
+        "weapon": "east_bow"
+      }
+    },
+    {
+      "id": "female_archer",
+      "gender": "female",
+      "job": "east_archer",
+      "parts": {
+        "body": "female_base",
+        "face": "default_female",
+        "hair": "female_archer_hair",
+        "clothes": "east_archer_clothes",
+        "armor": "east_archer_armor",
+        "weapon": "east_bow"
+      }
+    },
+    {
+      "id": "male_knight",
+      "gender": "male",
+      "job": "west_knight",
+      "parts": {
+        "body": "male_base",
+        "face": "default_male",
+        "hair": "male_knight_hair",
+        "clothes": "west_knight_clothes",
+        "armor": "west_knight_armor",
+        "weapon": "knight_sword",
+        "shield": "knight_shield"
+      }
+    },
+    {
+      "id": "female_knight",
+      "gender": "female",
+      "job": "west_knight",
+      "parts": {
+        "body": "female_base",
+        "face": "default_female",
+        "hair": "female_knight_hair",
+        "clothes": "west_knight_clothes",
+        "armor": "west_knight_armor",
+        "weapon": "knight_sword",
+        "shield": "knight_shield"
+      }
+    },
+    {
+      "id": "male_west_archer",
+      "gender": "male",
+      "job": "west_archer",
+      "parts": {
+        "body": "male_base",
+        "face": "default_male",
+        "hair": "male_archer_hair",
+        "clothes": "west_archer_clothes",
+        "armor": "west_archer_armor",
+        "weapon": "west_bow"
+      }
+    },
+    {
+      "id": "female_west_archer",
+      "gender": "female",
+      "job": "west_archer",
+      "parts": {
+        "body": "female_base",
+        "face": "default_female",
+        "hair": "female_archer_hair",
+        "clothes": "west_archer_clothes",
+        "armor": "west_archer_armor",
+        "weapon": "west_bow"
+      }
+    }
+  ]
+}
