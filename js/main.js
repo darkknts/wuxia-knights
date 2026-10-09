@@ -273,9 +273,10 @@ class WorldScene extends Phaser.Scene{
   dx+=this.joystick.x;dy+=this.joystick.y;
 
   if(dx||dy){
-   // 승인된 기본 캐릭터 이미지를 유지한 채 이동을 먼저 검증한다.
+   // 확정된 캐릭터 이미지를 유지하며 방향 전환과 걷기 리듬을 부드럽게 적용
    if(Math.abs(dx)>Math.abs(dy)) this.facing=dx>0?"right":"left";
    else if(Math.abs(dy)>0.01) this.facing=dy>0?"down":"up";
+   this.playerSprite.setFlipX(this.facing==="left");
    const l=Math.hypot(dx,dy);
    this.player.x=Phaser.Math.Clamp(
     this.player.x+dx/l*this.playerSpeed*this.game.loop.delta/1000,110,2450
@@ -284,9 +285,14 @@ class WorldScene extends Phaser.Scene{
     this.player.y+dy/l*this.playerSpeed*this.game.loop.delta/1000,110,1490
    );
    this.walkTime+=this.game.loop.delta;
-   this.playerSprite.y=Math.sin(this.walkTime/95)*1.5;
+   const gait=this.walkTime/95;
+   this.playerSprite.y=Math.abs(Math.sin(gait))*-2.2;
+   this.playerSprite.scaleX=0.82+(Math.sin(gait)*0.025);
+   this.playerSprite.scaleY=0.82-(Math.sin(gait)*0.025);
   }else{
+   // 멈출 때 기준 크기와 위치로 부드럽게 복귀
    this.playerSprite.y=0;
+   this.playerSprite.setScale(0.82);
   }
 
   // 몬스터와 가까워지면 전투창 없이 바로 검을 휘두른다.
@@ -317,7 +323,7 @@ const config={
 new Phaser.Game(config);
 
 // 새 버전이 배포되면 10초 이내 자동 새로고침
-const APP_VERSION="19";
+const APP_VERSION="20";
 setInterval(async()=>{
  try{
   const r=await fetch("./version.json?t="+Date.now(),{cache:"no-store"});
