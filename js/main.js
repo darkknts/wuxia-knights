@@ -6,8 +6,8 @@ class WorldScene extends Phaser.Scene{
 
  preload(){
   // Kenney Tiny Dungeon - 실제 16x16 PNG 에셋
-  this.load.image("hero-idle","./assets/characters/swordswoman-idle.png?v=26");
-  this.load.spritesheet("hero-walk-natural","./assets/characters/swordswoman-walk-natural.png?v=26",{frameWidth:64,frameHeight:64});
+  this.load.image("hero-idle","./assets/characters/swordswoman-idle.png?v=27");
+  this.load.spritesheet("hero-walk","./assets/characters/swordswoman-walk-64.png?v=27",{frameWidth:64,frameHeight:64});
   const tiles=[1,2,3,4,5,13,15,16,17,25,26,27,28,29,40,48,49,57,59,84,85,86];
   tiles.forEach(n=>{
    const id=String(n).padStart(4,"0");
@@ -22,7 +22,7 @@ class WorldScene extends Phaser.Scene{
   // 실제 Kenney 바닥 타일을 반복해 전체 월드 구성
   this.add.tileSprite(1280,800,this.worldW,this.worldH,"k48").setOrigin(.5).setScale(2);
 
-  this.anims.create({key:"hero-walk-natural-loop",frames:this.anims.generateFrameNumbers("hero-walk-natural",{start:0,end:3}),frameRate:9,repeat:-1});
+  this.anims.create({key:"hero-walk-loop",frames:this.anims.generateFrameNumbers("hero-walk",{start:0,end:3}),frameRate:9,repeat:-1});
 
   this.drawMap();
   this.createPlayer();
@@ -103,7 +103,7 @@ class WorldScene extends Phaser.Scene{
   this.player=this.add.container(1280,800).setDepth(50);
   this.playerSprite=this.add.image(0,0,"hero-idle").setScale(0.82);
   this.player.add(this.playerSprite);
-  this.walkSprite=this.add.sprite(0,0,"hero-walk-natural",0).setScale(0.82).setVisible(false);
+  this.walkSprite=this.add.sprite(0,0,"hero-walk",0).setScale(0.82).setVisible(false);
   this.player.add(this.walkSprite);
 
   // 플레이어 손에 들린 검: 접근하면 실제로 휘두르는 모션
@@ -286,7 +286,7 @@ class WorldScene extends Phaser.Scene{
     this.playerSprite.setVisible(false);
     this.walkSprite.setVisible(true);
     this.walkSprite.setFlipX(this.facing==="left");
-    this.walkSprite.play("hero-walk-natural-loop",true);
+    this.walkSprite.play("hero-walk-loop",true);
     this.walkSprite.setPosition(0,0);
     this.walkSprite.setScale(0.82,0.82);
    }else{
@@ -345,7 +345,7 @@ const config={
 new Phaser.Game(config);
 
 // 새 버전이 배포되면 10초 이내 자동 새로고침
-const APP_VERSION="26";
+const APP_VERSION="27";
 setInterval(async()=>{
  try{
   const r=await fetch("./version.json?t="+Date.now(),{cache:"no-store"});
