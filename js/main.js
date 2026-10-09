@@ -115,6 +115,7 @@ class WorldScene extends Phaser.Scene{
   this.weapon.fillRect(-2,0,4,12);
   this.weapon.setPosition(18,-2);
   this.weapon.setRotation(-1.05);
+  this.weapon.setVisible(false);
   this.player.add(this.weapon);
 
   this.slash=this.add.graphics().setVisible(false);
@@ -166,7 +167,7 @@ class WorldScene extends Phaser.Scene{
   this.slash.setPosition(Math.cos(attackAngle)*18,Math.sin(attackAngle)*18);
   this.slash.setRotation(attackAngle);
   this.slash.setVisible(true);
-  this.weapon.setVisible(true);
+  this.weapon.setVisible(false);
 
   // 검을 크게 휘두르는 420ms 공격 애니메이션
   this.tweens.add({
@@ -323,7 +324,7 @@ const config={
 new Phaser.Game(config);
 
 // 새 버전이 배포되면 10초 이내 자동 새로고침
-const APP_VERSION="17";
+const APP_VERSION="18";
 setInterval(async()=>{
  try{
   const r=await fetch("./version.json?t="+Date.now(),{cache:"no-store"});
