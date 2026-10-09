@@ -6,7 +6,8 @@ class WorldScene extends Phaser.Scene{
 
  preload(){
   // Kenney Tiny Dungeon - 실제 16x16 PNG 에셋
-  this.load.image("hero-idle","./assets/characters/swordswoman-idle.png?v=28");
+  this.load.image("hero-idle","./assets/characters/swordswoman-idle.png?v=31");
+  this.load.spritesheet("hero-walk-source","./assets/characters/swordswoman-walk-64.png?v=31",{frameWidth:64,frameHeight:64});
   const tiles=[1,2,3,4,5,13,15,16,17,25,26,27,28,29,40,48,49,57,59,84,85,86];
   tiles.forEach(n=>{
    const id=String(n).padStart(4,"0");
