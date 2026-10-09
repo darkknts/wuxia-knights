@@ -6,6 +6,7 @@ class WorldScene extends Phaser.Scene{
 
  preload(){
   // Kenney Tiny Dungeon - 실제 16x16 PNG 에셋
+  this.load.spritesheet("hero","./assets/characters/swordswoman-walk.svg",{frameWidth:64,frameHeight:64});
   const tiles=[1,2,3,4,5,13,15,16,17,25,26,27,28,29,40,48,49,57,59,84,85,86];
   tiles.forEach(n=>{
    const id=String(n).padStart(4,"0");
@@ -14,6 +15,10 @@ class WorldScene extends Phaser.Scene{
  }
 
  create(){
+  this.anims.create({key:"walk-down",frames:this.anims.generateFrameNumbers("hero",{start:0,end:3}),frameRate:8,repeat:-1});
+  this.anims.create({key:"walk-right",frames:this.anims.generateFrameNumbers("hero",{start:4,end:7}),frameRate:8,repeat:-1});
+  this.anims.create({key:"walk-left",frames:this.anims.generateFrameNumbers("hero",{start:8,end:11}),frameRate:8,repeat:-1});
+  this.anims.create({key:"walk-up",frames:this.anims.generateFrameNumbers("hero",{start:12,end:15}),frameRate:8,repeat:-1});
   this.cameras.main.setBackgroundColor("#17231a");
   this.worldW=2560; this.worldH=1600;
 
@@ -97,7 +102,7 @@ class WorldScene extends Phaser.Scene{
 
  createPlayer(){
   this.player=this.add.container(1280,800).setDepth(50);
-  this.playerSprite=this.add.image(0,0,"k86").setScale(3);
+  this.playerSprite=this.add.sprite(0,0,"hero",0).setScale(1.05);
   this.player.add(this.playerSprite);
 
   // 플레이어 손에 들린 검: 접근하면 실제로 휘두르는 모션
@@ -120,7 +125,7 @@ class WorldScene extends Phaser.Scene{
 
   this.playerSpeed=220;
   this.playerHP=100;
-  this.walkTime=0;
+  this.facing="down";
   this.attackCooldown=0;
   this.attackTimer=0;
   this.attackTarget=null;
@@ -176,7 +181,7 @@ class WorldScene extends Phaser.Scene{
 
   this.tweens.add({
    targets:this.playerSprite,
-   x:4,scaleX:3.12,scaleY:2.9,
+   x:2,scaleX:1.12,scaleY:0.96,
    duration:90,yoyo:true,ease:"Quad.easeOut"
   });
 
@@ -270,10 +275,9 @@ class WorldScene extends Phaser.Scene{
   dx+=this.joystick.x;dy+=this.joystick.y;
 
   if(dx||dy){
-   this.walkTime+=this.game.loop.delta;
-   const step=Math.sin(this.walkTime/70)*2.2;
-   this.playerSprite.y=step;
-   this.playerSprite.scale=3+Math.abs(Math.sin(this.walkTime/70))*0.04;
+   // 실제 4방향 프레임 애니메이션: 진행 방향에 맞춰 팔다리와 몸이 반복 동작
+   if(Math.abs(dx)>Math.abs(dy)) this.facing=dx>0?"right":"left";
+   else if(Math.abs(dy)>0.01) this.facing=dy>0?"down":"up";
    const l=Math.hypot(dx,dy);
    this.player.x=Phaser.Math.Clamp(
     this.player.x+dx/l*this.playerSpeed*this.game.loop.delta/1000,110,2450
@@ -281,9 +285,14 @@ class WorldScene extends Phaser.Scene{
    this.player.y=Phaser.Math.Clamp(
     this.player.y+dy/l*this.playerSpeed*this.game.loop.delta/1000,110,1490
    );
+   this.playerSprite.play("walk-"+this.facing,true);
   }else{
-   this.playerSprite.y=0;
-   this.playerSprite.scale=3;
+   // 멈추면 걷기 애니메이션을 멈추고 해당 방향의 대기 프레임 유지
+   this.playerSprite.anims.stop();
+   const idleFrame={down:0,right:4,left:8,up:12}[this.facing] ?? 0;
+   this.playerSprite.setFrame(idleFrame);
+   this.playerSprite.setScale(1.05);
+   this.playerSprite.setPosition(0,0);
   }
 
   // 몬스터와 가까워지면 전투창 없이 바로 검을 휘두른다.
@@ -314,7 +323,7 @@ const config={
 new Phaser.Game(config);
 
 // 새 버전이 배포되면 10초 이내 자동 새로고침
-const APP_VERSION="15";
+const APP_VERSION="16";
 setInterval(async()=>{
  try{
   const r=await fetch("./version.json?t="+Date.now(),{cache:"no-store"});
