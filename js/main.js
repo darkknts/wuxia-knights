@@ -6,8 +6,8 @@ class WorldScene extends Phaser.Scene{
 
  preload(){
   // Kenney Tiny Dungeon - 실제 16x16 PNG 에셋
-  this.load.image("hero-idle","./assets/characters/swordswoman-idle.png?v=27");
-  this.load.spritesheet("hero-walk","./assets/characters/swordswoman-walk-64.png?v=27",{frameWidth:64,frameHeight:64});
+  this.load.image("hero-idle","./assets/characters/swordswoman-idle.png?v=28");
+  this.load.spritesheet("hero-walk","./assets/characters/swordswoman-walk-64.png?v=28",{frameWidth:64,frameHeight:64});
   const tiles=[1,2,3,4,5,13,15,16,17,25,26,27,28,29,40,48,49,57,59,84,85,86];
   tiles.forEach(n=>{
    const id=String(n).padStart(4,"0");
@@ -278,27 +278,9 @@ class WorldScene extends Phaser.Scene{
   dx+=this.joystick.x;dy+=this.joystick.y;
 
   if(dx||dy){
-   // 좌우 입력이 있을 때만 바라보는 방향을 갱신한다.
-   // 위/아래 이동이나 정지 시에는 마지막 방향을 유지한다.
+   // 좌우 입력에서만 방향을 갱신하고, 위아래 이동은 현재 방향의 걷기 프레임을 사용한다.
    if(Math.abs(dx)>0.12 && Math.abs(dx)>=Math.abs(dy)*0.75){
     this.facing=dx>0?"right":"left";
-    this.playerSprite.setFlipX(this.facing==="left");
-    this.playerSprite.setVisible(false);
-    this.walkSprite.setVisible(true);
-    this.walkSprite.setFlipX(this.facing==="left");
-    this.walkSprite.play("hero-walk-loop",true);
-    this.walkSprite.setPosition(0,0);
-    this.walkSprite.setScale(0.82,0.82);
-   }else{
-    // 위/아래는 기존 캐릭터 이미지를 사용한다.
-    this.walkSprite.anims.stop();
-    this.walkSprite.setVisible(false);
-    this.playerSprite.setVisible(true);
-    this.playerSprite.setFlipX(this.facing==="left");
-    this.walkTime+=this.game.loop.delta;
-    const step=(Math.sin(this.walkTime/75)+1)/2;
-    this.playerSprite.y=-step*2.5;
-    this.playerSprite.setScale(0.82-step*0.012,0.82+step*0.012);
    }
    const l=Math.hypot(dx,dy);
    this.player.x=Phaser.Math.Clamp(
@@ -307,8 +289,16 @@ class WorldScene extends Phaser.Scene{
    this.player.y=Phaser.Math.Clamp(
     this.player.y+dy/l*this.playerSpeed*this.game.loop.delta/1000,110,1490
    );
+
+   // 모든 이동 방향에서 실제 4프레임 걷기 이미지를 표시한다.
+   this.playerSprite.setVisible(false);
+   this.walkSprite.setVisible(true);
+   this.walkSprite.setFlipX(this.facing==="left");
+   this.walkSprite.setPosition(0,0);
+   this.walkSprite.setScale(0.82,0.82);
+   this.walkSprite.play("hero-walk-loop",true);
   }else{
-   // 멈추면 걷기 애니메이션을 멈추고 마지막 바라보던 방향으로 대기한다.
+   // 정지하면 애니메이션을 멈추고 마지막 방향을 유지한다.
    this.walkSprite.anims.stop();
    this.walkSprite.setVisible(false);
    this.playerSprite.setVisible(true);
