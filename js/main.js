@@ -21,7 +21,7 @@ class WorldScene extends Phaser.Scene{
   // 실제 Kenney 바닥 타일을 반복해 전체 월드 구성
   this.add.tileSprite(1280,800,this.worldW,this.worldH,"k48").setOrigin(.5).setScale(2);
 
-  this.prepareWalkAnimation();
+  this.anims.create({key:"hero-walk-loop",frames:[0,2].map(i=>({key:"hero-walk-source",frame:i})),frameRate:5,repeat:-1});
   this.drawMap();
   this.createPlayer();
   this.createMonsters();
@@ -97,49 +97,11 @@ class WorldScene extends Phaser.Scene{
   }).setOrigin(.5).setDepth(30);
  }
 
- prepareWalkAnimation(){
-  // 원본 PNG의 검은 배경이 브라우저에 불투명하게 나타나는 경우를 대비해
-  // Canvas로 다시 만들고, 가장자리와 연결된 검은 배경만 투명 처리한다.
-  const source=this.textures.get("hero-walk-source").getSourceImage();
-  const canvasTexture=this.textures.createCanvas("hero-walk-clean",256,64);
-  const ctx=canvasTexture.getContext();
-  ctx.drawImage(source,0,0,256,64);
-  const image=ctx.getImageData(0,0,256,64);
-  const data=image.data, w=256, h=64;
-  const seen=new Uint8Array(w*h), queue=new Int32Array(w*h);
-  let head=0,tail=0;
-  const push=(x,y)=>{
-   const p=y*w+x, i=p*4;
-   if(seen[p]||data[i+3]===0)return;
-   // 순수 검정/검정에 가까운 배경만 후보로 삼는다.
-   if(data[i]<38&&data[i+1]<38&&data[i+2]<38){
-    seen[p]=1;queue[tail++]=p;
-   }
-  };
-  for(let x=0;x<w;x++){push(x,0);push(x,h-1)}
-  for(let y=0;y<h;y++){push(0,y);push(w-1,y)}
-  while(head<tail){
-   const p=queue[head++],x=p%w,y=(p/w)|0;
-   data[p*4+3]=0;
-   if(x>0)push(x-1,y);if(x<w-1)push(x+1,y);
-   if(y>0)push(x,y-1);if(y<h-1)push(x,y+1);
-  }
-  ctx.putImageData(image,0,0);
-  // 4개 프레임을 개별 등록해 투명 배경을 유지한 채 재생한다.
-  for(let i=0;i<4;i++)canvasTexture.add(String(i),0,i*64,0,64,64);
-  canvasTexture.refresh();
-  this.anims.create({
-   key:"hero-walk-loop",
-   frames:[0,1,2,3].map(i=>({key:"hero-walk-clean",frame:String(i)})),
-   frameRate:9,repeat:-1
-  });
- }
-
  createPlayer(){
   this.player=this.add.container(1280,800).setDepth(50);
   this.playerSprite=this.add.image(0,0,"hero-idle").setScale(0.82);
   this.player.add(this.playerSprite);
-  this.walkSprite=this.add.sprite(0,0,"hero-walk-clean","0").setScale(0.82).setVisible(false);
+  this.walkSprite=this.add.sprite(0,0,"hero-walk-source",0).setScale(0.82).setVisible(false);
   this.player.add(this.walkSprite);
 
   // 플레이어 손에 들린 검: 접근하면 실제로 휘두르는 모션
@@ -363,7 +325,7 @@ const config={
 new Phaser.Game(config);
 
 // 새 버전이 배포되면 10초 이내 자동 새로고침
-const APP_VERSION="30";
+const APP_VERSION="31";
 setInterval(async()=>{
  try{
   const r=await fetch("./version.json?t="+Date.now(),{cache:"no-store"});
