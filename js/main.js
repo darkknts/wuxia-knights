@@ -285,13 +285,20 @@ class WorldScene extends Phaser.Scene{
     this.player.y+dy/l*this.playerSpeed*this.game.loop.delta/1000,110,1490
    );
    this.walkTime+=this.game.loop.delta;
-   const gait=this.walkTime/95;
-   this.playerSprite.y=Math.abs(Math.sin(gait))*-2.2;
-   this.playerSprite.scaleX=0.82+(Math.sin(gait)*0.025);
-   this.playerSprite.scaleY=0.82-(Math.sin(gait)*0.025);
+   // 좌우 걷기: 다리 움직임을 암시하는 교대 스텝과 몸통 리듬
+   const gait=this.walkTime/82;
+   const step=Math.sin(gait);
+   this.playerSprite.y=-Math.abs(step)*2.8;
+   this.playerSprite.scaleX=0.82+(Math.cos(gait)*0.018);
+   this.playerSprite.scaleY=0.82-(Math.cos(gait)*0.018);
+   this.playerSprite.rotation=step*0.035;
+   // 망토/포니테일의 흔들림을 보조하는 미세한 좌우 리듬
+   this.playerSprite.x=Math.cos(gait)*1.1;
   }else{
-   // 멈출 때 기준 크기와 위치로 부드럽게 복귀
+   // 멈추면 걷기 리듬을 즉시 정리하고 정면 대기 자세로 복귀
    this.playerSprite.y=0;
+   this.playerSprite.x=0;
+   this.playerSprite.rotation=0;
    this.playerSprite.setScale(0.82);
   }
 
@@ -323,7 +330,7 @@ const config={
 new Phaser.Game(config);
 
 // 새 버전이 배포되면 10초 이내 자동 새로고침
-const APP_VERSION="20";
+const APP_VERSION="21";
 setInterval(async()=>{
  try{
   const r=await fetch("./version.json?t="+Date.now(),{cache:"no-store"});
