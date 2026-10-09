@@ -7,7 +7,6 @@ class WorldScene extends Phaser.Scene{
  preload(){
   // Kenney Tiny Dungeon - 실제 16x16 PNG 에셋
   this.load.image("hero-idle","./assets/characters/swordswoman-idle.png?v=22");
-  this.load.spritesheet("hero-walk","./assets/characters/swordswoman-walk-64.png?v=22",{frameWidth:64,frameHeight:64});
   const tiles=[1,2,3,4,5,13,15,16,17,25,26,27,28,29,40,48,49,57,59,84,85,86];
   tiles.forEach(n=>{
    const id=String(n).padStart(4,"0");
@@ -16,7 +15,6 @@ class WorldScene extends Phaser.Scene{
  }
 
  create(){
-  this.anims.create({key:"hero-walk-right",frames:this.anims.generateFrameNumbers("hero-walk",{start:0,end:3}),frameRate:8,repeat:-1});
   this.cameras.main.setBackgroundColor("#17231a");
   this.worldW=2560; this.worldH=1600;
 
@@ -102,8 +100,6 @@ class WorldScene extends Phaser.Scene{
   this.player=this.add.container(1280,800).setDepth(50);
   this.playerSprite=this.add.image(0,0,"hero-idle").setScale(0.82);
   this.player.add(this.playerSprite);
-  this.walkSprite=this.add.sprite(0,0,"hero-walk",0).setScale(1.64).setVisible(false);
-  this.player.add(this.walkSprite);
 
   // 플레이어 손에 들린 검: 접근하면 실제로 휘두르는 모션
   this.weapon=this.add.graphics();
@@ -279,20 +275,7 @@ class WorldScene extends Phaser.Scene{
   if(dx||dy){
    if(Math.abs(dx)>Math.abs(dy)){
     this.facing=dx>0?"right":"left";
-    // 좌우 이동은 실제 4프레임 스프라이트 애니메이션 사용
-    this.playerSprite.setVisible(false);
-    this.walkSprite.setVisible(true);
-    this.walkSprite.setFlipX(this.facing==="left");
-    this.walkSprite.play("hero-walk-right",true);
-   }else{
-    // 위/아래는 별도 프레임 없이 확정된 기본 캐릭터 모습 유지
-    this.facing=dy>0?"down":"up";
-    this.walkSprite.anims.stop();
-    this.walkSprite.setVisible(false);
-    this.playerSprite.setVisible(true);
-    this.playerSprite.setFlipX(false);
-    this.playerSprite.setPosition(0,0);
-    this.playerSprite.setScale(0.82);
+    this.playerSprite.setFlipX(this.facing==="left");
    }
    const l=Math.hypot(dx,dy);
    this.player.x=Phaser.Math.Clamp(
@@ -301,11 +284,11 @@ class WorldScene extends Phaser.Scene{
    this.player.y=Phaser.Math.Clamp(
     this.player.y+dy/l*this.playerSpeed*this.game.loop.delta/1000,110,1490
    );
+   // 기본 캐릭터 PNG만 사용해 검은 사각형을 방지하고, 이동 중에는 가볍게 발걸음 리듬을 준다.
+   this.walkTime+=this.game.loop.delta;
+   this.playerSprite.y=-Math.abs(Math.sin(this.walkTime/85))*2.2;
+   this.playerSprite.setScale(0.82+Math.abs(Math.sin(this.walkTime/85))*0.012);
   }else{
-   // 멈추면 걷기 프레임을 멈추고 확정된 대기 이미지로 복귀
-   this.walkSprite.anims.stop();
-   this.walkSprite.setVisible(false);
-   this.playerSprite.setVisible(true);
    this.playerSprite.setFlipX(false);
    this.playerSprite.setPosition(0,0);
    this.playerSprite.setScale(0.82);
@@ -339,7 +322,7 @@ const config={
 new Phaser.Game(config);
 
 // 새 버전이 배포되면 10초 이내 자동 새로고침
-const APP_VERSION="22";
+const APP_VERSION="23";
 setInterval(async()=>{
  try{
   const r=await fetch("./version.json?t="+Date.now(),{cache:"no-store"});
