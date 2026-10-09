@@ -273,7 +273,9 @@ class WorldScene extends Phaser.Scene{
   dx+=this.joystick.x;dy+=this.joystick.y;
 
   if(dx||dy){
-   if(Math.abs(dx)>Math.abs(dy)){
+   // 좌우 입력이 있을 때만 바라보는 방향을 갱신한다.
+   // 위/아래 이동이나 정지 시에는 마지막 방향을 유지한다.
+   if(Math.abs(dx)>0.12 && Math.abs(dx)>=Math.abs(dy)*0.75){
     this.facing=dx>0?"right":"left";
     this.playerSprite.setFlipX(this.facing==="left");
    }
@@ -284,14 +286,15 @@ class WorldScene extends Phaser.Scene{
    this.player.y=Phaser.Math.Clamp(
     this.player.y+dy/l*this.playerSpeed*this.game.loop.delta/1000,110,1490
    );
-   // 기본 캐릭터 PNG만 사용해 검은 사각형을 방지하고, 이동 중에는 가볍게 발걸음 리듬을 준다.
+   // 걷기 시 눈에 보이도록 위아래 바운스와 작은 스쿼시를 반복한다.
    this.walkTime+=this.game.loop.delta;
-   this.playerSprite.y=-Math.abs(Math.sin(this.walkTime/85))*2.2;
-   this.playerSprite.setScale(0.82+Math.abs(Math.sin(this.walkTime/85))*0.012);
+   const step=(Math.sin(this.walkTime/75)+1)/2;
+   this.playerSprite.y=-step*5;
+   this.playerSprite.setScale(0.82-step*0.025,0.82+step*0.025);
   }else{
-   this.playerSprite.setFlipX(false);
+   // 정지 시 마지막 바라보는 방향과 위치를 유지한다.
    this.playerSprite.setPosition(0,0);
-   this.playerSprite.setScale(0.82);
+   this.playerSprite.setScale(0.82,0.82);
   }
 
   // 몬스터와 가까워지면 전투창 없이 바로 검을 휘두른다.
@@ -322,7 +325,7 @@ const config={
 new Phaser.Game(config);
 
 // 새 버전이 배포되면 10초 이내 자동 새로고침
-const APP_VERSION="23";
+const APP_VERSION="24";
 setInterval(async()=>{
  try{
   const r=await fetch("./version.json?t="+Date.now(),{cache:"no-store"});
