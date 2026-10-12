@@ -292,7 +292,10 @@ class WorldScene extends Phaser.Scene{
     this.walkSprite.setFlipX(this.facing==="left");
     this.walkSprite.setPosition(0,0);
     this.walkSprite.setScale(0.82,0.82);
-    this.walkSprite.play("hero-walk-loop",true);
+    // 재생 중인 애니메이션을 매 프레임 다시 시작하지 않는다.
+    if(!this.walkSprite.anims.isPlaying || this.walkSprite.anims.currentAnim?.key!=="hero-walk-loop"){
+     this.walkSprite.play("hero-walk-loop");
+    }
    }else{
     // 위아래 이동은 검은 사각형이 발생하지 않는 기존 캐릭터 이미지를 사용한다.
     this.walkSprite.anims.stop();
@@ -340,7 +343,7 @@ const config={
 new Phaser.Game(config);
 
 // 새 버전이 배포되면 10초 이내 자동 새로고침
-const APP_VERSION="32";
+const APP_VERSION="33";
 setInterval(async()=>{
  try{
   const r=await fetch("./version.json?t="+Date.now(),{cache:"no-store"});
