@@ -7,7 +7,7 @@ class WorldScene extends Phaser.Scene{
  preload(){
   // Kenney Tiny Dungeon - 실제 16x16 PNG 에셋
   this.load.image("hero-idle","./assets/characters/swordswoman-idle.png?v=31");
-  this.load.spritesheet("hero-walk-source","./assets/characters/swordswoman-walk-64.png?v=31",{frameWidth:64,frameHeight:64});
+  this.load.spritesheet("hero-walk-source","./assets/characters/swordswoman-walk-2frame.png?v=32",{frameWidth:64,frameHeight:64});
   const tiles=[1,2,3,4,5,13,15,16,17,25,26,27,28,29,40,48,49,57,59,84,85,86];
   tiles.forEach(n=>{
    const id=String(n).padStart(4,"0");
@@ -22,7 +22,7 @@ class WorldScene extends Phaser.Scene{
   // 실제 Kenney 바닥 타일을 반복해 전체 월드 구성
   this.add.tileSprite(1280,800,this.worldW,this.worldH,"k48").setOrigin(.5).setScale(2);
 
-  this.anims.create({key:"hero-walk-loop",frames:[0,2].map(i=>({key:"hero-walk-source",frame:i})),frameRate:5,repeat:-1});
+  this.anims.create({key:"hero-walk-loop",frames:[0,1].map(i=>({key:"hero-walk-source",frame:i})),frameRate:5,repeat:-1});
   this.drawMap();
   this.createPlayer();
   this.createMonsters();
@@ -277,19 +277,33 @@ class WorldScene extends Phaser.Scene{
   dx+=this.joystick.x;dy+=this.joystick.y;
 
   if(dx||dy){
+   // 좌우 이동일 때만 2프레임 걷기 애니메이션을 사용한다.
    if(Math.abs(dx)>0.12 && Math.abs(dx)>=Math.abs(dy)*0.75){
     this.facing=dx>0?"right":"left";
    }
    const l=Math.hypot(dx,dy);
    this.player.x=Phaser.Math.Clamp(this.player.x+dx/l*this.playerSpeed*this.game.loop.delta/1000,110,2450);
    this.player.y=Phaser.Math.Clamp(this.player.y+dy/l*this.playerSpeed*this.game.loop.delta/1000,110,1490);
-   this.playerSprite.setVisible(false);
-   this.walkSprite.setVisible(true);
-   this.walkSprite.setFlipX(this.facing==="left");
-   this.walkSprite.setPosition(0,0);
-   this.walkSprite.setScale(0.82,0.82);
-   this.walkSprite.play("hero-walk-loop",true);
+
+   const horizontal=Math.abs(dx)>0.12 && Math.abs(dx)>=Math.abs(dy)*0.75;
+   if(horizontal){
+    this.playerSprite.setVisible(false);
+    this.walkSprite.setVisible(true);
+    this.walkSprite.setFlipX(this.facing==="left");
+    this.walkSprite.setPosition(0,0);
+    this.walkSprite.setScale(0.82,0.82);
+    this.walkSprite.play("hero-walk-loop",true);
+   }else{
+    // 위아래 이동은 검은 사각형이 발생하지 않는 기존 캐릭터 이미지를 사용한다.
+    this.walkSprite.anims.stop();
+    this.walkSprite.setVisible(false);
+    this.playerSprite.setVisible(true);
+    this.playerSprite.setFlipX(this.facing==="left");
+    this.playerSprite.setPosition(0,0);
+    this.playerSprite.setScale(0.82,0.82);
+   }
   }else{
+   // 정지하면 걷기 프레임을 중단하고 마지막 방향을 바라보는 대기 이미지로 복귀한다.
    this.walkSprite.anims.stop();
    this.walkSprite.setVisible(false);
    this.playerSprite.setVisible(true);
@@ -326,7 +340,7 @@ const config={
 new Phaser.Game(config);
 
 // 새 버전이 배포되면 10초 이내 자동 새로고침
-const APP_VERSION="31";
+const APP_VERSION="32";
 setInterval(async()=>{
  try{
   const r=await fetch("./version.json?t="+Date.now(),{cache:"no-store"});
