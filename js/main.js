@@ -277,42 +277,34 @@ class WorldScene extends Phaser.Scene{
   dx+=this.joystick.x;dy+=this.joystick.y;
 
   if(dx||dy){
-   // 좌우 이동일 때만 2프레임 걷기 애니메이션을 사용한다.
-   if(Math.abs(dx)>0.12 && Math.abs(dx)>=Math.abs(dy)*0.75){
-    this.facing=dx>0?"right":"left";
-   }
    const l=Math.hypot(dx,dy);
    this.player.x=Phaser.Math.Clamp(this.player.x+dx/l*this.playerSpeed*this.game.loop.delta/1000,110,2450);
    this.player.y=Phaser.Math.Clamp(this.player.y+dy/l*this.playerSpeed*this.game.loop.delta/1000,110,1490);
-
    const horizontal=Math.abs(dx)>0.12 && Math.abs(dx)>=Math.abs(dy)*0.75;
    if(horizontal){
+    this.facing=dx>0?"right":"left";
+    // 하나의 스프라이트에서 0→1→0→1 순서로 교체해 겹침을 방지한다.
     this.playerSprite.setVisible(false);
+    this.walkSprite.anims.stop();
     this.walkSprite.setVisible(true);
     this.walkSprite.setFlipX(this.facing==="left");
     this.walkSprite.setPosition(0,0);
-    this.walkSprite.setScale(0.82,0.82);
-    // 재생 중인 애니메이션을 매 프레임 다시 시작하지 않는다.
-    if(!this.walkSprite.anims.isPlaying || this.walkSprite.anims.currentAnim?.key!=="hero-walk-loop"){
-     this.walkSprite.play("hero-walk-loop");
-    }
+    this.walkSprite.setScale(0.82);
+    this.walkTime=(this.walkTime+this.game.loop.delta)%400;
+    this.walkSprite.setFrame(this.walkTime<200?0:1);
    }else{
-    // 위아래 이동은 검은 사각형이 발생하지 않는 기존 캐릭터 이미지를 사용한다.
-    this.walkSprite.anims.stop();
+    this.walkTime=0;
     this.walkSprite.setVisible(false);
     this.playerSprite.setVisible(true);
     this.playerSprite.setFlipX(this.facing==="left");
-    this.playerSprite.setPosition(0,0);
-    this.playerSprite.setScale(0.82,0.82);
    }
   }else{
-   // 정지하면 걷기 프레임을 중단하고 마지막 방향을 바라보는 대기 이미지로 복귀한다.
+   this.walkTime=0;
    this.walkSprite.anims.stop();
    this.walkSprite.setVisible(false);
+   this.walkSprite.setFrame(0);
    this.playerSprite.setVisible(true);
    this.playerSprite.setFlipX(this.facing==="left");
-   this.playerSprite.setPosition(0,0);
-   this.playerSprite.setScale(0.82,0.82);
   }
 
   // 몬스터와 가까워지면 전투창 없이 바로 검을 휘두른다.
@@ -343,7 +335,7 @@ const config={
 new Phaser.Game(config);
 
 // 새 버전이 배포되면 10초 이내 자동 새로고침
-const APP_VERSION="34";
+const APP_VERSION="35";
 setInterval(async()=>{
  try{
   const r=await fetch("./version.json?t="+Date.now(),{cache:"no-store"});
