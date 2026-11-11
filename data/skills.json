@@ -1,8 +1,0 @@
-{
-  "skills": [],
-  "speechBubble": {
-    "enabled": true,
-    "userEditable": true,
-    "scope": "skill"
-  }
-}

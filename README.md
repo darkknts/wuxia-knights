@@ -1,20 +1,26 @@
 # 무협기사단 (Wuxia Knights)
 
-방치형 RPG **무협기사단 (Wuxia Knights)** 프로젝트입니다.
+A new game project. This repository is the single source of truth for planning documents, design decisions, assets, and implementation.
 
-## 게임 방향
-- 2등신 픽셀 아트
-- 동양 무림 vs 서양 기사단
-- 자동 전투와 방치 보상
-- 직업: 무사, 궁수, 기사, 아처
-- 스킬 사용 시 사용자 지정 말풍선
-- 캐릭터/몬스터/맵/스킬 데이터를 분리하여 확장 가능한 구조
+## Project status
+- Phase: Planning
+- Game concept: To be agreed collaboratively in ChatGPT
+- Implementation workspace: Claude / GitHub
+- Planning language: Korean
+- Repository language: English filenames and folders; Korean design content where useful
 
-## 초기 캐릭터
-### 동양
-- 무사: 청룡언월도, 듬직한 장수 스타일
-- 궁수: 동양 궁사 스타일
+## Documentation
+- [Game overview](docs/01-game-overview.md)
+- [Core game design](docs/02-core-game-design.md)
+- [Systems and mechanics](docs/03-systems-and-mechanics.md)
+- [World and narrative](docs/04-world-and-narrative.md)
+- [Art and UI direction](docs/05-art-and-ui-direction.md)
+- [Development roadmap](docs/06-development-roadmap.md)
+- [Decision log](docs/decision-log.md)
 
-### 서양
-- 기사: 검과 방패를 사용하는 중장갑 기사
-- 아처: 서양식 활을 사용하는 원거리 딜러
+## Working agreement
+1. Discuss and agree on requirements before implementation.
+2. Record confirmed decisions in `docs/decision-log.md`.
+3. Claude should read the documentation before changing code.
+4. Keep implementation changes focused and update relevant documentation.
+5. Do not treat unconfirmed ideas as final requirements.
